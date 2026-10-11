@@ -29,5 +29,4 @@ compile_commands.json
 
 # IDE
 .idea/
-.vscode/
 .cache/
