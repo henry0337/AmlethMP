@@ -1,0 +1,33 @@
+# Build output
+build/
+build-*/
+cmake-build-*/
+out/
+
+# CMake
+CMakeLists.txt.user
+CMakeUserPresets.json
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+
+# Qt
+*.autosave
+*.qmlc
+*.jsc
+.qmlls.ini
+
+# Packaging
+*.AppImage
+*.deb
+*.rpm
+.flatpak-builder/
+
+# Logs
+*.log
+
+# IDE
+.idea/
+.vscode/
+.cache/
