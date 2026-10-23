@@ -1,0 +1,221 @@
+/* ==========================================================================
+   AmlethMP design system — dark mode only.
+   Design tokens live in :root and are the single source of truth.
+   Breakpoints (media queries cannot read custom properties):
+     mobile  < 768px
+     tablet  768px – 1279px
+     desktop 1280px – 1920px
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* Color */
+  --color-bg: #0a0a0b;
+  --color-surface: #161618;
+  --color-surface-raised: #1f1f22;
+  --color-border: #2c2c31;
+  --color-text: #f4f4f5;
+  --color-text-muted: #a1a1aa;
+  --color-text-subtle: #71717a;
+  --color-accent: #a78bfa;
+  --color-accent-glow: rgba(167, 139, 250, 0.16);
+  --color-danger: #f87171;
+  --color-danger-bg: rgba(248, 113, 113, 0.1);
+  --color-on-light: #1f1f1f;
+  --color-light: #ffffff;
+
+  /* Decorative album-cover gradients */
+  --cover-1: linear-gradient(135deg, #7c5cf0, #2a1b6b);
+  --cover-2: linear-gradient(135deg, #e0607e, #5b1530);
+  --cover-3: linear-gradient(135deg, #3ba7a0, #0e3a3d);
+  --cover-4: linear-gradient(135deg, #e0a04a, #5a3510);
+  --cover-5: linear-gradient(135deg, #5a8be0, #14285e);
+  --cover-6: linear-gradient(135deg, #9a6be0, #3a1a5e);
+
+  /* Typography */
+  --font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", system-ui, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.15;
+  --line-height-body: 1.5;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Shape */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  /* Control */
+  --control-height: 52px;
+  --transition: 150ms ease;
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Brand ---------- */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+}
+
+.brand__mark {
+  width: 36px;
+  height: 36px;
+  flex: none;
+}
+
+/* ---------- Button ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 0 var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition), opacity var(--transition);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.btn--primary {
+  background: var(--color-light);
+  color: var(--color-on-light);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: #e8e8ea;
+}
+
+.btn--secondary {
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: var(--color-surface);
+  border-color: var(--color-text-subtle);
+}
+
+.btn__icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+/* Loading spinner shown inside a button */
+.btn__spinner {
+  display: none;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn__spinner {
+    animation-duration: 2s;
+  }
+
+  .btn {
+    transition: none;
+  }
+}
+
+/* ---------- Alert ---------- */
+
+.alert {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+}

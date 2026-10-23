@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AmlethMP Design</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      height: 100vh;
+      height: 100dvh;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      overflow: hidden;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      padding: var(--space-5);
+      border-right: 1px solid var(--color-border);
+      background: var(--color-surface);
+      overflow-y: auto;
+    }
+
+    .sidebar h2 {
+      margin-bottom: var(--space-2);
+      color: var(--color-text-subtle);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .screen,
+    .link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      border: 0;
+      border-radius: var(--radius-sm);
+      background: none;
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .screen:hover,
+    .link:hover {
+      background: var(--color-surface-raised);
+      color: var(--color-text);
+    }
+
+    .screen.is-active {
+      background: var(--color-surface-raised);
+      color: var(--color-text);
+    }
+
+    .tag {
+      padding: 2px var(--space-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      color: var(--color-text-subtle);
+      font-size: var(--font-size-xs);
+    }
+
+    .viewer {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      min-width: 0;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-3) var(--space-5);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-1);
+    }
+
+    .chip {
+      padding: var(--space-1) var(--space-3);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      background: none;
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+    }
+
+    .chip:hover {
+      color: var(--color-text);
+    }
+
+    .chip.is-active {
+      border-color: var(--color-text);
+      color: var(--color-text);
+    }
+
+    .size {
+      margin-left: auto;
+      color: var(--color-text-subtle);
+      font-size: var(--font-size-sm);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stage {
+      display: grid;
+      place-items: center;
+      min-height: 0;
+      background: #050506;
+    }
+
+    .frame-wrap {
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      background: var(--color-bg);
+    }
+
+    #frame {
+      display: block;
+      border: 0;
+      transform-origin: top left;
+    }
+
+    @media (max-width: 767px) {
+      body {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto minmax(0, 1fr);
+      }
+
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--color-border);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span>AmlethMP Design</span></div>
+
+    <div>
+      <h2>Screens</h2>
+      <div class="list">
+        <button class="screen" type="button" data-src="screens/Login.html">Login <span class="tag">In
+            review</span></button>
+      </div>
+    </div>
+
+    <div>
+      <h2>Overview</h2>
+      <div class="list">
+        <a class="link" href="States.html">States</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="viewer">
+    <div class="toolbar">
+      <div class="group" aria-label="Device size">
+        <button class="chip preset" type="button" data-w="390" data-h="844">Mobile 390×844</button>
+        <button class="chip preset" type="button" data-w="400" data-h="640">Mobile 10:16</button>
+        <button class="chip preset" type="button" data-w="768" data-h="1024">Tablet 768×1024</button>
+        <button class="chip preset" type="button" data-w="1280" data-h="720">1280×720</button>
+        <button class="chip preset" type="button" data-w="1366" data-h="768">1366×768</button>
+        <button class="chip preset" type="button" data-w="1920" data-h="1080">1920×1080</button>
+      </div>
+      <div class="group" aria-label="Screen state">
+        <button class="chip state is-active" type="button" data-state="">Default</button>
+        <button class="chip state" type="button" data-state="loading">Loading</button>
+        <button class="chip state" type="button" data-state="error">Error</button>
+      </div>
+      <span class="size" id="sizeLabel"></span>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="frame-wrap" id="frameWrap">
+        <iframe id="frame" title="Screen preview"></iframe>
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
