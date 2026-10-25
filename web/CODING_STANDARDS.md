@@ -141,8 +141,8 @@
 
 ## 15. Tài liệu tham khảo
 
-- React Rules: https://react.dev/reference/rules
-- TypeScript Handbook: https://www.typescriptlang.org/docs/handbook/intro.html
-- Next.js App Router: https://nextjs.org/docs/app
-- Next.js Production Checklist: https://nextjs.org/docs/app/guides/production-checklist
-- ESLint Configuration: https://eslint.org/docs/latest/use/configure/
+- React Rules: <https://react.dev/reference/rules>
+- TypeScript Handbook: <https://www.typescriptlang.org/docs/handbook/intro.html>
+- Next.js App Router: <https://nextjs.org/docs/app>
+- Next.js Production Checklist: <https://nextjs.org/docs/app/guides/production-checklist>
+- ESLint Configuration: <https://eslint.org/docs/latest/use/configure/>

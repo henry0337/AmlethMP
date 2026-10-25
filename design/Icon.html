@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Icon — AmlethMP Design</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      padding: var(--space-6) var(--space-5);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-7);
+    }
+
+    .page__back {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    .section h2 {
+      font-size: var(--font-size-xl);
+    }
+
+    .section__sub {
+      max-width: 70ch;
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: var(--space-5);
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .item__label {
+      color: var(--color-text-subtle);
+      font-size: var(--font-size-sm);
+    }
+
+    /* iOS-style rounded mask on the full-bleed master */
+    .ios {
+      display: block;
+      border-radius: 22.37%;
+    }
+
+    /* Android adaptive icon: layers are 108dp, only the center 72dp is visible.
+       --s is the visible size; the layers are drawn 1.5x and cropped. */
+    .adaptive {
+      --s: 120px;
+      position: relative;
+      width: var(--s);
+      height: var(--s);
+      overflow: hidden;
+    }
+
+    .adaptive img {
+      position: absolute;
+      top: calc(var(--s) * -0.25);
+      left: calc(var(--s) * -0.25);
+      width: calc(var(--s) * 1.5);
+      height: calc(var(--s) * 1.5);
+    }
+
+    .adaptive--circle { border-radius: 50%; }
+    .adaptive--squircle { border-radius: 34%; }
+    .adaptive--rounded { border-radius: 22%; }
+
+    /* Safe zone: the 66dp circle inside the 72dp visible area */
+    .adaptive--guide::after {
+      content: "";
+      position: absolute;
+      inset: calc(var(--s) * 0.0417);
+      border: 1px dashed rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+    }
+
+    .size-row {
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-5);
+    }
+
+    .context {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-5);
+    }
+
+    .context__panel {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      padding: var(--space-5);
+      border-radius: var(--radius-md);
+    }
+
+    .context__panel--dark { background: #000; border: 1px solid var(--color-border); }
+    .context__panel--light { background: #f2f2f4; }
+
+    .app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-xs);
+    }
+
+    .context__panel--dark .app { color: #fff; }
+    .context__panel--light .app { color: #1c1c1e; }
+
+    .themed {
+      display: grid;
+      place-items: center;
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: #d8cdfa;
+      color: #3a2594;
+    }
+
+    .themed svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-size-sm);
+    }
+
+    th, td {
+      padding: var(--space-3) var(--space-3);
+      border-bottom: 1px solid var(--color-border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--color-text-subtle);
+      font-weight: var(--font-weight-medium);
+    }
+
+    td:first-child { font-family: ui-monospace, Consolas, monospace; white-space: nowrap; }
+    td { color: var(--color-text-muted); }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <a class="page__back" href="index.html">← Back to overview</a>
+
+    <section class="section">
+      <h2>AmlethMP icon</h2>
+      <p class="section__sub">
+        A bold "A" for Amleth with an equalizer inside it for music. A white "A" and violet bars (the app's accent color)
+        sit on a deep indigo-to-black gradient, so the icon matches the dark UI.
+      </p>
+      <div class="row">
+        <div class="item">
+          <img class="ios" src="assets/icon.svg" width="256" height="256" alt="AmlethMP icon">
+          <span class="item__label">Master (iOS / Play Store)</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Android adaptive icon</h2>
+      <p class="section__sub">
+        Foreground and background are separate layers, so the launcher can apply any shape. The dashed circle on the last
+        example is the 66dp safe zone: keep the mark inside it.
+      </p>
+      <div class="row">
+        <div class="item">
+          <div class="adaptive adaptive--circle"><img src="assets/icon-background.svg" alt=""><img src="assets/icon-foreground.svg" alt="AmlethMP icon"></div>
+          <span class="item__label">Circle</span>
+        </div>
+        <div class="item">
+          <div class="adaptive adaptive--squircle"><img src="assets/icon-background.svg" alt=""><img src="assets/icon-foreground.svg" alt="AmlethMP icon"></div>
+          <span class="item__label">Squircle</span>
+        </div>
+        <div class="item">
+          <div class="adaptive adaptive--rounded"><img src="assets/icon-background.svg" alt=""><img src="assets/icon-foreground.svg" alt="AmlethMP icon"></div>
+          <span class="item__label">Rounded square</span>
+        </div>
+        <div class="item">
+          <div class="adaptive adaptive--circle adaptive--guide"><img src="assets/icon-background.svg" alt=""><img src="assets/icon-foreground.svg" alt="AmlethMP icon"></div>
+          <span class="item__label">Safe zone (66dp)</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Sizes</h2>
+      <p class="section__sub">Checks that the mark still reads when small.</p>
+      <div class="size-row">
+        <div class="item"><img class="ios" src="assets/icon.svg" width="192" height="192" alt=""><span class="item__label">192</span></div>
+        <div class="item"><img class="ios" src="assets/icon.svg" width="96" height="96" alt=""><span class="item__label">96</span></div>
+        <div class="item"><img class="ios" src="assets/icon.svg" width="64" height="64" alt=""><span class="item__label">64</span></div>
+        <div class="item"><img class="ios" src="assets/icon.svg" width="48" height="48" alt=""><span class="item__label">48</span></div>
+        <div class="item"><img class="ios" src="assets/icon.svg" width="32" height="32" alt=""><span class="item__label">32</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>In context</h2>
+      <div class="context">
+        <div class="context__panel context__panel--dark">
+          <div class="app"><img class="ios" src="assets/icon.svg" width="96" height="96" alt=""><span>AmlethMP</span></div>
+        </div>
+        <div class="context__panel context__panel--light">
+          <div class="app"><img class="ios" src="assets/icon.svg" width="96" height="96" alt=""><span>AmlethMP</span></div>
+          <div class="app">
+            <div class="themed">
+              <svg viewBox="0 0 1024 1024" aria-hidden="true">
+                <g transform="translate(512 512) scale(0.82) translate(-512 -512)">
+                  <path d="M352 730 L512 290 L672 730" fill="none" stroke="currentColor" stroke-width="60" stroke-linecap="round" stroke-linejoin="round"/>
+                  <g fill="currentColor">
+                    <rect x="451" y="625" width="30" height="65" rx="15"/>
+                    <rect x="497" y="570" width="30" height="120" rx="15"/>
+                    <rect x="543" y="600" width="30" height="90" rx="15"/>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <span>Android themed icon</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Files</h2>
+      <table>
+        <thead><tr><th>File (design/assets)</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td>icon.svg / icon-1024.png</td><td>Full-bleed 1024×1024 master, no rounded corners and no transparency. iOS App Store icon and Google Play (resize to 512×512). Let the OS apply the rounding.</td></tr>
+          <tr><td>icon-background.svg</td><td>Android adaptive icon, background layer (108dp canvas).</td></tr>
+          <tr><td>icon-foreground.svg / icon-foreground-1024.png</td><td>Android adaptive icon, foreground layer. The mark stays inside the 66dp safe zone.</td></tr>
+          <tr><td>icon-monochrome.svg</td><td>Android 13+ themed icon. Single color, the system tints it.</td></tr>
+          <tr><td>logo-mark.svg</td><td>Rounded-square version for use inside the app (login screen, About, web favicon).</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</body>
+</html>

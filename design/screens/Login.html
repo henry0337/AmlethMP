@@ -4,26 +4,48 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login — AmlethMP</title>
+  <link rel="icon" href="../assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../style.css">
   <style>
     /* ---------- Login screen ---------- */
 
-    body {
-      background:
-        radial-gradient(ellipse 80% 50% at 50% -10%, var(--color-accent-glow), transparent 70%),
-        var(--color-bg);
-      background-attachment: fixed;
-    }
-
     .login {
+      position: relative;
+      isolation: isolate;
       display: grid;
       grid-template-columns: minmax(0, 1fr);
       min-height: 100vh;
       min-height: 100dvh;
     }
 
-    .login__art {
-      display: none;
+    /* Gray background photo (see assets/CREDITS.md). Mobile and tablet: full screen, dimmed for legibility. */
+    .login__bg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: var(--color-bg);
+    }
+
+    .login__bg img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 45% center;
+      filter: grayscale(1);
+    }
+
+    .login__bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-bg) 60%, transparent),
+        color-mix(in srgb, var(--color-bg) 88%, transparent) 55%,
+        color-mix(in srgb, var(--color-bg) 96%, transparent)
+      );
     }
 
     .login__panel {
@@ -40,6 +62,17 @@
       width: 100%;
       max-width: 400px;
       text-align: center;
+    }
+
+    /* App icon only (no wordmark), centered right above the title */
+    .login .brand {
+      align-self: center;
+      margin-bottom: var(--space-3);
+    }
+
+    .login .brand__mark {
+      width: 64px;
+      height: 64px;
     }
 
     .login__intro {
@@ -97,7 +130,7 @@
       color: var(--color-text-muted);
     }
 
-    /* States: set with ?state=loading | error (see script.js) */
+    /* States: set with ?state=loading (Google) | loading-discord | error (see script.js) */
     .login__error,
     .label--loading {
       display: none;
@@ -107,25 +140,35 @@
       display: block;
     }
 
-    html[data-state="loading"] .label--idle,
-    html[data-state="loading"] .login__google .btn__icon {
+    /* The provider button being used swaps its icon and label for a spinner */
+    html[data-state="loading"] .login__google .label--idle,
+    html[data-state="loading"] .login__google .btn__icon,
+    html[data-state="loading-discord"] .login__discord .label--idle,
+    html[data-state="loading-discord"] .login__discord .btn__icon {
       display: none;
     }
 
-    html[data-state="loading"] .label--loading {
+    html[data-state="loading"] .login__google .label--loading,
+    html[data-state="loading-discord"] .login__discord .label--loading {
       display: inline;
     }
 
-    html[data-state="loading"] .login__google .btn__spinner {
+    html[data-state="loading"] .login__google .btn__spinner,
+    html[data-state="loading-discord"] .login__discord .btn__spinner {
       display: block;
     }
 
-    html[data-state="loading"] .login__google,
-    html[data-state="loading"] .login__guest {
+    /* While signing in, every button is locked and the other ones are dimmed */
+    html[data-state^="loading"] .login__google,
+    html[data-state^="loading"] .login__discord,
+    html[data-state^="loading"] .login__guest {
       pointer-events: none;
     }
 
-    html[data-state="loading"] .login__guest {
+    html[data-state="loading"] .login__discord,
+    html[data-state="loading"] .login__guest,
+    html[data-state="loading-discord"] .login__google,
+    html[data-state="loading-discord"] .login__guest {
       opacity: 0.55;
     }
 
@@ -154,8 +197,9 @@
         font-size: var(--font-size-3xl);
       }
 
-      .login .brand {
-        align-self: center;
+      .login .brand__mark {
+        width: 72px;
+        height: 72px;
       }
     }
 
@@ -165,37 +209,24 @@
         grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
       }
 
-      .login__art {
-        position: relative;
-        display: block;
-        overflow: hidden;
+      /* The photo fills the left column (1.15fr of 2.15fr) and fades into the dark panel. */
+      .login__bg {
+        right: auto;
+        width: calc(100% * 1.15 / 2.15);
         -webkit-mask-image: linear-gradient(to right, #000 55%, transparent 100%);
         mask-image: linear-gradient(to right, #000 55%, transparent 100%);
       }
 
-      .art__grid {
-        position: absolute;
-        inset: -25% -10%;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-5);
-        transform: rotate(-12deg);
+      .login__bg img {
+        object-position: 62% center;
       }
 
-      .art__tile {
-        aspect-ratio: 1;
-        border-radius: var(--radius-lg);
-        opacity: 0.85;
+      .login__bg::after {
+        background: color-mix(in srgb, var(--color-bg) 25%, transparent);
       }
-
-      .art__tile:nth-child(6n + 1) { background: var(--cover-1); }
-      .art__tile:nth-child(6n + 2) { background: var(--cover-2); }
-      .art__tile:nth-child(6n + 3) { background: var(--cover-3); }
-      .art__tile:nth-child(6n + 4) { background: var(--cover-4); }
-      .art__tile:nth-child(6n + 5) { background: var(--cover-5); }
-      .art__tile:nth-child(6n) { background: var(--cover-6); }
 
       .login__panel {
+        grid-column: 2;
         align-items: center;
         padding: var(--space-7);
       }
@@ -218,10 +249,6 @@
         font-size: var(--font-size-3xl);
       }
 
-      .login .brand {
-        align-self: flex-start;
-      }
-
       .login__hint {
         text-align: center;
       }
@@ -230,40 +257,22 @@
 </head>
 <body>
   <main class="login">
-    <section class="login__art" aria-hidden="true">
-      <div class="art__grid">
-        <span class="art__tile"></span><span class="art__tile"></span><span class="art__tile"></span><span class="art__tile"></span>
-        <span class="art__tile"></span><span class="art__tile"></span><span class="art__tile"></span><span class="art__tile"></span>
-        <span class="art__tile"></span><span class="art__tile"></span><span class="art__tile"></span><span class="art__tile"></span>
-        <span class="art__tile"></span><span class="art__tile"></span><span class="art__tile"></span><span class="art__tile"></span>
-      </div>
-    </section>
+    <div class="login__bg" aria-hidden="true">
+      <img src="../assets/login-bg.jpg" alt="">
+    </div>
 
     <section class="login__panel">
       <div class="login__content">
-        <div class="brand">
-          <svg class="brand__mark" viewBox="0 0 36 36" aria-hidden="true">
-            <defs>
-              <linearGradient id="brand-gradient" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" style="stop-color: var(--color-accent)"/>
-                <stop offset="1" style="stop-color: #5b3fd0"/>
-              </linearGradient>
-            </defs>
-            <rect width="36" height="36" rx="10" fill="url(#brand-gradient)"/>
-            <rect x="9" y="15" width="4" height="10" rx="2" fill="#fff"/>
-            <rect x="16" y="9" width="4" height="18" rx="2" fill="#fff"/>
-            <rect x="23" y="13" width="4" height="12" rx="2" fill="#fff"/>
-          </svg>
-          <span>AmlethMP</span>
-        </div>
-
         <div class="login__intro">
+          <div class="brand">
+            <img class="brand__mark" src="../assets/logo-mark.svg" alt="AmlethMP">
+          </div>
           <h1 class="login__title">Music that moves with you.</h1>
           <p class="login__subtitle">Sign in to sync your library and playlists on every device.</p>
         </div>
 
         <div class="login__actions">
-          <p class="alert login__error" role="alert">Couldn't sign in with Google. Check your connection and try again.</p>
+          <p class="alert login__error" role="alert">Something went wrong while signing in. Please try again.</p>
 
           <button class="btn btn--primary login__google" type="button">
             <svg class="btn__icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -274,6 +283,15 @@
             </svg>
             <span class="btn__spinner" aria-hidden="true"></span>
             <span class="label--idle">Continue with Google</span>
+            <span class="label--loading">Signing in…</span>
+          </button>
+
+          <button class="btn btn--discord login__discord" type="button">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+            </svg>
+            <span class="btn__spinner" aria-hidden="true"></span>
+            <span class="label--idle">Continue with Discord</span>
             <span class="label--loading">Signing in…</span>
           </button>
 

@@ -24,14 +24,8 @@
   --color-danger-bg: rgba(248, 113, 113, 0.1);
   --color-on-light: #1f1f1f;
   --color-light: #ffffff;
-
-  /* Decorative album-cover gradients */
-  --cover-1: linear-gradient(135deg, #7c5cf0, #2a1b6b);
-  --cover-2: linear-gradient(135deg, #e0607e, #5b1530);
-  --cover-3: linear-gradient(135deg, #3ba7a0, #0e3a3d);
-  --cover-4: linear-gradient(135deg, #e0a04a, #5a3510);
-  --cover-5: linear-gradient(135deg, #5a8be0, #14285e);
-  --cover-6: linear-gradient(135deg, #9a6be0, #3a1a5e);
+  --color-discord: #5865f2;
+  --color-discord-hover: #4752c4;
 
   /* Typography */
   --font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", system-ui, sans-serif;
@@ -173,6 +167,15 @@ a {
 .btn--secondary:hover:not(:disabled) {
   background: var(--color-surface);
   border-color: var(--color-text-subtle);
+}
+
+.btn--discord {
+  background: var(--color-discord);
+  color: var(--color-light);
+}
+
+.btn--discord:hover:not(:disabled) {
+  background: var(--color-discord-hover);
 }
 
 .btn__icon {

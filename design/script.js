@@ -46,11 +46,17 @@
     });
   });
 
-  document.querySelectorAll('.preset').forEach(function (el) {
-    el.addEventListener('click', function () {
-      current.w = Number(el.dataset.w);
-      current.h = Number(el.dataset.h);
-      activate('.preset', el);
+  // Mobile / Tablet / Desktop dropdowns: picking a size in one resets the other two.
+  var sizeSelects = document.querySelectorAll('.preset-select');
+  sizeSelects.forEach(function (select) {
+    select.addEventListener('change', function () {
+      var size = select.value.split('x');
+      current.w = Number(size[0]);
+      current.h = Number(size[1]);
+      sizeSelects.forEach(function (other) {
+        if (other !== select) other.selectedIndex = 0;
+        other.classList.toggle('is-active', other === select);
+      });
       fit();
     });
   });
@@ -66,5 +72,6 @@
   window.addEventListener('resize', fit);
 
   document.querySelector('.screen').click();
-  document.querySelector('.preset').click();
+  sizeSelects[0].value = '440x956';
+  sizeSelects[0].dispatchEvent(new Event('change'));
 })();

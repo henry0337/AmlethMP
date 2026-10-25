@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AmlethMP Design</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <style>
     body {
@@ -23,6 +24,11 @@
       border-right: 1px solid var(--color-border);
       background: var(--color-surface);
       overflow-y: auto;
+    }
+
+    .sidebar .brand {
+      font-size: var(--font-size-md);
+      white-space: nowrap;
     }
 
     .sidebar h2 {
@@ -116,6 +122,20 @@
       color: var(--color-text);
     }
 
+    /* The open list is drawn by the browser; give it explicit dark colors so it stays readable. */
+    .select option {
+      background: var(--color-surface-raised);
+      color: var(--color-text);
+    }
+
+    .select {
+      padding-right: var(--space-6);
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%23a1a1aa' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+      background-position: right var(--space-3) center;
+      background-repeat: no-repeat;
+    }
+
     .size {
       margin-left: auto;
       color: var(--color-text-subtle);
@@ -159,7 +179,7 @@
 
 <body>
   <aside class="sidebar">
-    <div class="brand"><span>AmlethMP Design</span></div>
+    <div class="brand"><img class="brand__mark" src="assets/logo-mark.svg" alt=""><span>AmlethMP Design</span></div>
 
     <div>
       <h2>Screens</h2>
@@ -173,6 +193,7 @@
       <h2>Overview</h2>
       <div class="list">
         <a class="link" href="States.html">States</a>
+        <a class="link" href="Icon.html">Icon</a>
       </div>
     </div>
   </aside>
@@ -180,16 +201,33 @@
   <main class="viewer">
     <div class="toolbar">
       <div class="group" aria-label="Device size">
-        <button class="chip preset" type="button" data-w="390" data-h="844">Mobile 390×844</button>
-        <button class="chip preset" type="button" data-w="400" data-h="640">Mobile 10:16</button>
-        <button class="chip preset" type="button" data-w="768" data-h="1024">Tablet 768×1024</button>
-        <button class="chip preset" type="button" data-w="1280" data-h="720">1280×720</button>
-        <button class="chip preset" type="button" data-w="1366" data-h="768">1366×768</button>
-        <button class="chip preset" type="button" data-w="1920" data-h="1080">1920×1080</button>
+        <select class="chip select preset-select" aria-label="Mobile size">
+          <option value="" disabled hidden>Mobile</option>
+          <option value="360x780">Galaxy S25 (360×780)</option>
+          <option value="412x915">Galaxy S25 Ultra (412×915)</option>
+          <option value="393x852">iPhone 16 (393×852)</option>
+          <option value="440x956">iPhone 16 Pro Max (440×956)</option>
+        </select>
+        <select class="chip select preset-select" aria-label="Tablet size">
+          <option value="" disabled hidden selected>Tablet</option>
+          <option value="712x1138">Galaxy Tab S9 (712×1138)</option>
+          <option value="800x1280">Galaxy Tab S9+ (800×1280)</option>
+          <option value="820x1180">iPad (820×1180)</option>
+          <option value="834x1210">iPad Pro (834×1210)</option>
+        </select>
+        <select class="chip select preset-select" aria-label="Desktop size">
+          <option value="" disabled hidden selected>Desktop</option>
+          <option value="1280x720">1280×720</option>
+          <option value="1366x768">1366×768</option>
+          <option value="1440x900">1440×900</option>
+          <option value="1600x900">1600×900</option>
+          <option value="1920x1080">1920×1080</option>
+        </select>
       </div>
       <div class="group" aria-label="Screen state">
         <button class="chip state is-active" type="button" data-state="">Default</button>
-        <button class="chip state" type="button" data-state="loading">Loading</button>
+        <button class="chip state" type="button" data-state="loading">Loading · Google</button>
+        <button class="chip state" type="button" data-state="loading-discord">Loading · Discord</button>
         <button class="chip state" type="button" data-state="error">Error</button>
       </div>
       <span class="size" id="sizeLabel"></span>

@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>States — AmlethMP Design</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <style>
     body {
@@ -83,7 +84,7 @@
 
     <section class="section">
       <h2>Login</h2>
-      <p class="section__sub">Default, loading (after tapping Continue with Google) and error (sign-in failed).</p>
+      <p class="section__sub">Default, loading (after tapping Continue with Google or Continue with Discord) and error (sign-in failed).</p>
 
       <div class="row">
         <div class="item">
@@ -91,8 +92,12 @@
           <div class="frame frame--mobile"><iframe src="screens/Login.html" title="Login mobile default"></iframe></div>
         </div>
         <div class="item">
-          <span class="item__label">Mobile · Loading</span>
-          <div class="frame frame--mobile"><iframe src="screens/Login.html?state=loading" title="Login mobile loading"></iframe></div>
+          <span class="item__label">Mobile · Loading (Google)</span>
+          <div class="frame frame--mobile"><iframe src="screens/Login.html?state=loading" title="Login mobile loading with Google"></iframe></div>
+        </div>
+        <div class="item">
+          <span class="item__label">Mobile · Loading (Discord)</span>
+          <div class="frame frame--mobile"><iframe src="screens/Login.html?state=loading-discord" title="Login mobile loading with Discord"></iframe></div>
         </div>
         <div class="item">
           <span class="item__label">Mobile · Error</span>
@@ -106,8 +111,12 @@
           <div class="frame frame--desktop"><iframe src="screens/Login.html" title="Login desktop default"></iframe></div>
         </div>
         <div class="item">
-          <span class="item__label">Desktop 1280×720 · Loading</span>
-          <div class="frame frame--desktop"><iframe src="screens/Login.html?state=loading" title="Login desktop loading"></iframe></div>
+          <span class="item__label">Desktop 1280×720 · Loading (Google)</span>
+          <div class="frame frame--desktop"><iframe src="screens/Login.html?state=loading" title="Login desktop loading with Google"></iframe></div>
+        </div>
+        <div class="item">
+          <span class="item__label">Desktop 1280×720 · Loading (Discord)</span>
+          <div class="frame frame--desktop"><iframe src="screens/Login.html?state=loading-discord" title="Login desktop loading with Discord"></iframe></div>
         </div>
         <div class="item">
           <span class="item__label">Desktop 1280×720 · Error</span>
