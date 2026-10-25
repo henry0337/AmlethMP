@@ -1,0 +1,62 @@
+version: 2
+
+updates:
+  - package-ecosystem: "uv"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "backend"]
+    commit-message:
+      prefix: "chore(backend)"
+    groups:
+      python-dependencies:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "npm"
+    directory: "/web"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "web"]
+    commit-message:
+      prefix: "chore(web)"
+    groups:
+      npm-dependencies:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "gradle"
+    directory: "/android"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "android"]
+    commit-message:
+      prefix: "chore(android)"
+    groups:
+      gradle-dependencies:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "nuget"
+    directory: "/windows"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "windows"]
+    commit-message:
+      prefix: "chore(windows)"
+    groups:
+      nuget-dependencies:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "cargo"
+    directory: "/linux"
+    schedule:
+      interval: "weekly"
+    labels: ["dependencies", "linux"]
+    commit-message:
+      prefix: "chore(linux)"
+    groups:
+      cargo-dependencies:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
