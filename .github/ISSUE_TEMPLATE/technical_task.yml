@@ -1,0 +1,62 @@
+name: Technical Task
+description: Công việc kỹ thuật nội bộ (implementation task, refactor, cấu hình, hạ tầng).
+title: "[Task]: "
+labels: ["task"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Dùng template này cho công việc kỹ thuật cần thực hiện.
+        Nếu là nhu cầu của người dùng, hãy dùng **Feature Request**.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform liên quan
+      multiple: true
+      options:
+        - Android
+        - Web
+        - Windows
+        - Linux
+        - Backend
+        - Design
+        - CI/CD / Tooling
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Mô tả
+      description: Công việc này là gì và tại sao cần làm?
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Danh sách công việc (Implementation Tasks)
+      description: Chia nhỏ công việc cần làm.
+      placeholder: |
+        - [ ] Công việc 1
+        - [ ] Công việc 2
+        - [ ] Thêm unit test
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Tiêu chí hoàn thành (Acceptance Criteria)
+      placeholder: |
+        - [ ] Tiêu chí 1
+        - [ ] Tiêu chí 2
+        - [ ] Không làm hỏng chức năng hiện có
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Thông tin bổ sung
+      description: Liên kết tới issue liên quan, tài liệu hoặc ghi chú kỹ thuật.

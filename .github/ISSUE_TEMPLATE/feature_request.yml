@@ -1,0 +1,68 @@
+name: Feature Request
+description: Đề xuất tính năng mới hoặc cải thiện chức năng hiện có.
+title: "[Feature]: "
+labels: ["enhancement"]
+
+body:
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform liên quan
+      description: Tính năng này áp dụng cho nơi nào? Có thể chọn nhiều mục.
+      multiple: true
+      options:
+        - Android
+        - Web
+        - Windows
+        - Linux
+        - Backend
+        - Design
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Vấn đề cần giải quyết (Problem Statement)
+      description: Tính năng này giải quyết vấn đề gì? Nếu là cải thiện chức năng hiện có, hãy mô tả hành vi hiện tại.
+      placeholder: Mô tả vấn đề hoặc hạn chế hiện tại.
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Giải pháp đề xuất (Proposed Solution)
+      description: Mô tả giải pháp bạn mong muốn.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Tiêu chí hoàn thành (Acceptance Criteria)
+      description: Những điều kiện để coi tính năng này là xong.
+      placeholder: |
+        - [ ] Tiêu chí 1
+        - [ ] Tiêu chí 2
+        - [ ] Tiêu chí 3
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Các phương án khác đã cân nhắc (Alternatives Considered)
+      description: Mô tả các giải pháp thay thế nếu có.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Thông tin bổ sung
+      description: Thêm ví dụ, tài liệu tham khảo hoặc mockup.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: Tôi đã tìm trong các issue hiện có và chưa thấy đề xuất tương tự.
+          required: true

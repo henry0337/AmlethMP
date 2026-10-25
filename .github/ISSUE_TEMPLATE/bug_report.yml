@@ -1,0 +1,91 @@
+name: Bug Report
+description: Báo cáo lỗi hoặc hành vi không như mong đợi.
+title: "[Bug]: "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cảm ơn bạn đã báo lỗi!
+        Hãy cung cấp càng nhiều thông tin càng tốt để việc sửa lỗi nhanh hơn.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform bị ảnh hưởng
+      description: Lỗi xảy ra ở đâu? Có thể chọn nhiều mục.
+      multiple: true
+      options:
+        - Android
+        - Web
+        - Windows
+        - Linux
+        - Backend
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Mô tả
+      description: Mô tả rõ ràng lỗi là gì.
+      placeholder: Mô tả điều gì đã xảy ra sai.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Các bước để tái hiện (Steps to Reproduce)
+      description: Liệt kê từng bước để gặp lại lỗi này.
+      placeholder: |
+        1. Mở...
+        2. Chuyển đến...
+        3. Bấm vào...
+        4. Quan sát thấy...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Hành vi mong đợi (Expected Behavior)
+      description: Bạn mong đợi điều gì sẽ xảy ra?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Hành vi thực tế (Actual Behavior)
+      description: Thực tế điều gì đã xảy ra?
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Môi trường (Environment)
+      description: Cung cấp thông tin môi trường liên quan.
+      placeholder: |
+        - OS:
+        - Phiên bản ứng dụng:
+        - Thiết bị / trình duyệt:
+        - Khác:
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log hoặc ảnh chụp màn hình
+      description: Đính kèm log hoặc screenshot liên quan. Với log, hãy dán trực tiếp vào đây.
+      render: shell
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: Tôi đã tìm trong các issue hiện có và chưa thấy lỗi này.
+          required: true
+        - label: Tôi đang dùng phiên bản mới nhất.
