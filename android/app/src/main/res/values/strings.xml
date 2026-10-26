@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">AmlethMP</string>
+
+    <string name="login_title">Music that moves with you.</string>
+    <string name="login_subtitle">Sign in to sync your library and playlists on every device.</string>
+    <string name="login_error">Something went wrong while signing in. Please try again.</string>
+    <string name="login_continue_google">Continue with Google</string>
+    <string name="login_continue_discord">Continue with Discord</string>
+    <string name="login_signing_in">Signing in…</string>
+    <string name="login_divider_or">or</string>
+    <string name="login_continue_guest">Continue as guest</string>
+    <string name="login_guest_hint">Guest sessions don\'t save your library.</string>
+    <string name="login_legal">By continuing, you agree to our %1$s and %2$s.</string>
+    <string name="login_legal_terms">Terms of Service</string>
+    <string name="login_legal_privacy">Privacy Policy</string>
+    <string name="login_logo_description">AmlethMP</string>
+
+    <string name="home_placeholder">Signed in</string>
 </resources>
