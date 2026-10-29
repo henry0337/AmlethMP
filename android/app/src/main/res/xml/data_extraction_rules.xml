@@ -1,19 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-   Sample data extraction rules file; uncomment and customize as necessary.
-   See https://developer.android.com/about/versions/12/backup-restore#xml-changes
-   for details.
--->
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 12 and newer. The session and its key cannot be restored on another device. -->
 <data-extraction-rules>
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <!-- files/datastore/session.enc: keep in sync with SESSION_FILE_NAME in SessionDataStore.kt -->
+        <exclude domain="file" path="datastore/session.enc" />
+        <!-- Tink keyset: keep in sync with SessionAead.KEYSET_PREFS_NAME -->
+        <exclude domain="sharedpref" path="session_keyset_prefs.xml" />
     </cloud-backup>
-    <!--
     <device-transfer>
-        <include .../>
-        <exclude .../>
+        <exclude domain="file" path="datastore/session.enc" />
+        <exclude domain="sharedpref" path="session_keyset_prefs.xml" />
     </device-transfer>
-    -->
 </data-extraction-rules>
