@@ -11,8 +11,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
-import dev.myrlennia237.amlethmp.screen.Navigator
 import dev.myrlennia237.amlethmp.core.ui.theme.AmlethMPTheme
+import dev.myrlennia237.amlethmp.screen.Navigator
 
 @AndroidEntryPoint
 class AMPMainActivity : ComponentActivity() {
