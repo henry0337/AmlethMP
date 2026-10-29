@@ -3,6 +3,7 @@
 > Mục tiêu: code dễ đọc, có type rõ ràng, dễ kiểm thử và an toàn. Đây là chuẩn mặc định; ưu tiên convention hiện có của repository nếu không gây lỗi hoặc rủi ro bảo mật.
 
 ## 1. Python style và naming
+
 - Tuân thủ PEP 8; dùng 4 spaces, không dùng tab để thụt lề.
 - Dùng `snake_case` cho module, package, function và biến; `PascalCase` cho class; `UPPER_SNAKE_CASE` cho hằng số.
 - Đặt tên thể hiện ý nghĩa nghiệp vụ; tránh tên mơ hồ như `data`, `tmp`, `obj` nếu có thể cụ thể hơn.
@@ -12,6 +13,7 @@
 - Không sửa code không liên quan tới phạm vi task nếu không cần thiết.
 
 ## 2. Type hints và Python features
+
 - Thêm type hints cho public function, service/repository boundary và dữ liệu phức tạp.
 - Ưu tiên type cụ thể; tránh `Any` nếu chưa có lý do và không dùng `type: ignore` thiếu giải thích.
 - Với Python 3.10+, ưu tiên `X | None`, `list[str]`, `dict[str, int]`; phải phù hợp `requires-python` của dự án.
@@ -20,6 +22,7 @@
 - Xử lý `None` và lỗi tường minh; tránh `assert` để validate input ở runtime production.
 
 ## 3. FastAPI routes và API contract
+
 - Nhóm endpoint theo domain bằng `APIRouter`; giữ `main.py`/application factory gọn.
 - Route handler nên điều phối HTTP concerns; chuyển nghiệp vụ phức tạp sang service/domain function.
 - Dùng `Annotated[..., Depends(...)]` cho dependency injection khi phù hợp với phiên bản và style của dự án.
@@ -31,6 +34,7 @@
 - Không đổi contract API hoặc tên field công khai mà không xem xét backward compatibility.
 
 ## 4. Pydantic và configuration
+
 - Với code mới, ưu tiên Pydantic v2; theo phiên bản đã pin trong repo và không trộn APIs v1/v2 tùy tiện.
 - Tách schema đầu vào, đầu ra và persistence model khi trách nhiệm khác nhau (ví dụ `UserCreate`, `UserRead`, `UserUpdate`).
 - Dùng validators cho quy tắc xác thực gắn với schema; đưa quy tắc nghiệp vụ phức tạp vào service/domain layer.
@@ -39,6 +43,7 @@
 - Không hardcode secret, API key, credential hoặc environment-specific URL trong source code.
 
 ## 5. Architecture và dependency injection
+
 - Tổ chức code theo domain/feature; dùng cấu trúc đơn giản trước, chỉ thêm layer khi có trách nhiệm thực sự.
 - Giữ hướng phụ thuộc rõ ràng: router/API layer không nên chứa truy vấn DB phức tạp; business logic không phụ thuộc trực tiếp vào HTTP request nếu có thể tránh.
 - Dùng FastAPI `Depends` để cung cấp dependency có vòng đời rõ ràng như current user, settings hoặc database session.
@@ -47,6 +52,7 @@
 - Tránh import vòng tròn; không đặt logic có side effect nặng ở cấp module khi import.
 
 ## 6. Async, I/O và database
+
 - Chỉ dùng `async def` khi các thao tác I/O được gọi hỗ trợ async hoặc không có công việc blocking cần chạy đồng bộ.
 - Không gọi blocking I/O, `time.sleep()` hoặc thư viện đồng bộ nặng trực tiếp trên event loop; chọn API async hoặc đưa công việc blocking vào thread/process phù hợp.
 - Với SQLAlchemy, tuân thủ phiên bản đang dùng; code mới theo SQLAlchemy 2.x style nếu dự án cho phép.
@@ -58,6 +64,7 @@
 - Không dùng `asyncio.create_task()` cho công việc quan trọng mà không quản lý vòng đời, lỗi và shutdown.
 
 ## 7. Error handling, logging và observability
+
 - Dùng `HTTPException` hoặc exception handler phù hợp tại HTTP boundary; không đưa HTTP-specific exception sâu vào domain layer nếu có thể tránh.
 - Trả lỗi nhất quán, hữu ích cho client nhưng không chứa stack trace, secret, SQL, token hoặc dữ liệu cá nhân không cần thiết.
 - Bắt những exception có thể xử lý; không nuốt lỗi bằng `except Exception: pass`.
@@ -67,6 +74,7 @@
 - Chuyển lỗi dependency bên ngoài thành lỗi phù hợp, đồng thời giữ nguyên thông tin chẩn đoán trong log nội bộ.
 
 ## 8. Security
+
 - Xác thực danh tính và kiểm tra quyền truy cập tài nguyên ở server; không coi việc ẩn UI hoặc endpoint trong docs là kiểm soát truy cập.
 - Mặc định mọi input bên ngoài là không đáng tin; validate kiểu, độ dài, range và format.
 - Chỉ trả các field cần thiết; áp dụng least privilege cho DB, service account và API token.
@@ -78,6 +86,7 @@
 - Giữ dependency được cập nhật; review rủi ro bảo mật trước khi thêm package mới.
 
 ## 9. Testing
+
 - Dùng pytest; đặt test trong `tests/` hoặc theo convention hiện tại của repo.
 - Đặt tên file `test_*.py` và tên test mô tả hành vi/điều kiện/kết quả.
 - Viết unit test cho logic nghiệp vụ và integration/API test cho status code, response schema, validation và auth.
@@ -88,6 +97,7 @@
 - Không phụ thuộc thứ tự chạy test; không dùng production data hoặc credential thật trong test.
 
 ## 10. Dependencies, tooling và CI
+
 - Ưu tiên `pyproject.toml` cho project metadata và tool configuration; giữ dependency/lock file đồng bộ với package manager thực tế (`uv`, Poetry, PDM hoặc pip-tools).
 - Không tự ý đổi package manager, Python version hoặc framework major version trong một task không liên quan.
 - Dùng một formatter/linter chính; lựa chọn mặc định gợi ý là Ruff cho lint/format.
@@ -118,6 +128,7 @@ app/
 - Tránh tạo mọi folder/layer ngay từ đầu nếu chưa có nhu cầu thực tế.
 
 ## 12. Checklist trước khi hoàn tất task
+
 - [ ] Code theo style và naming nhất quán với repository.
 - [ ] Request/response contracts và validation được cập nhật đúng.
 - [ ] Kiểm tra authorization và không làm lộ dữ liệu nhạy cảm.
@@ -127,6 +138,7 @@ app/
 - [ ] Tóm tắt thay đổi, kiểm tra đã chạy và hạn chế còn lại.
 
 ## Tài liệu tham chiếu
+
 - [FastAPI documentation](https://fastapi.tiangolo.com/)
 - [FastAPI — Bigger Applications](https://fastapi.tiangolo.com/tutorial/bigger-applications/)
 - [FastAPI — Dependencies](https://fastapi.tiangolo.com/tutorial/dependencies/)
