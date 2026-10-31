@@ -15,12 +15,11 @@ private val DarkColorScheme = darkColorScheme(
     onSurfaceVariant = TextMuted,
     outline = TextSubtle,
     outlineVariant = Border,
-    error = Danger,
-    errorContainer = DangerBackground
+    error = Danger
 )
 
 @Composable
-fun AmlethMPTheme(content: @Composable () -> Unit) {
+fun AMPTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = DarkColorScheme,
         typography = Typography,

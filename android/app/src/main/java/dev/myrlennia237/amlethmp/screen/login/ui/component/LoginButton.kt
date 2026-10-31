@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.myrlennia237.amlethmp.core.ui.theme.ControlHeight
 import dev.myrlennia237.amlethmp.core.ui.theme.PillShape
@@ -39,6 +40,7 @@ internal fun LoginButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isDimmed: Boolean = false,
+    minHeight: Dp = ControlHeight,
     border: BorderStroke? = null,
     icon: (@Composable () -> Unit)? = null
 ) {
@@ -56,7 +58,7 @@ internal fun LoginButton(
         contentPadding = PaddingValues(horizontal = Spacing.Space5),
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = ControlHeight)
+            .heightIn(min = minHeight)
             .alpha(if (isDimmed) DIMMED_ALPHA else 1f)
     ) {
         Row(

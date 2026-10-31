@@ -1,0 +1,19 @@
+<resources>
+    <string name="login_title">Music that\'s always with you</string>
+    <string name="login_subtitle">Sign in for the full experience</string>
+    <string name="login_error">Something went wrong while signing in. Please try again.</string>
+    <string name="login_continue_google">Sign in with Google</string>
+    <string name="login_continue_discord">Link with Discord</string>
+    <string name="login_signing_in">Signing in…</string>
+    <string name="login_divider_or">or</string>
+    <string name="login_continue_guest">Continue as guest</string>
+    <string name="login_guest_hint">The app won\'t store anything about you until you sign in</string>
+    <string name="login_legal">By continuing, you agree to our %1$s and %2$s.</string>
+    <string name="login_legal_terms">Terms of Service</string>
+    <string name="login_legal_privacy">Privacy Policy</string>
+    <string name="login_logo_description">AmlethMP</string>
+
+    <string name="home_placeholder">Signed in</string>
+
+    <string name="toast_close">Close notification</string>
+</resources>

@@ -8,4 +8,4 @@ import dagger.hilt.android.HiltAndroidApp
  * **Dagger** để phục vụ cho việc **DI - Dependency Injection**.
  */
 @HiltAndroidApp
-class AMPApplication : Application()
+class MainApplication : Application()

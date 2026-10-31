@@ -11,11 +11,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
-import dev.myrlennia237.amlethmp.core.ui.theme.AmlethMPTheme
+import dev.myrlennia237.amlethmp.core.ui.theme.AMPTheme
 import dev.myrlennia237.amlethmp.screen.Navigator
 
 @AndroidEntryPoint
-class AMPMainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -23,7 +23,7 @@ class AMPMainActivity : ComponentActivity() {
             navigationBarStyle = SystemBarStyle.dark(Color.TRANSPARENT)
         )
         setContent {
-            AmlethMPTheme {
+            AMPTheme {
                 Surface(
                     color = MaterialTheme.colorScheme.background,
                     modifier = Modifier.fillMaxSize()

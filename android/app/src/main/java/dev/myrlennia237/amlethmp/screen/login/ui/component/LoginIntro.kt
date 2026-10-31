@@ -26,10 +26,11 @@ internal fun LoginIntro(
     titleStyle: TextStyle,
     logoSize: Dp,
     textAlign: TextAlign,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = horizontalAlignment,
         verticalArrangement = Arrangement.spacedBy(Spacing.Space3),
         modifier = modifier
     ) {

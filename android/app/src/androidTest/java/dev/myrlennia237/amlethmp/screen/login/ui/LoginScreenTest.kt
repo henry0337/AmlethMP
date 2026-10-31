@@ -1,13 +1,23 @@
 package dev.myrlennia237.amlethmp.screen.login.ui
 
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import dev.myrlennia237.amlethmp.R
+import dev.myrlennia237.amlethmp.core.ui.component.AMPToastHost
+import dev.myrlennia237.amlethmp.core.ui.component.AMPToastState
+import dev.myrlennia237.amlethmp.core.ui.component.LocalToastState
+import dev.myrlennia237.amlethmp.core.ui.theme.AMPTheme
 import dev.myrlennia237.amlethmp.screen.login.data.SignInMethod
-import dev.myrlennia237.amlethmp.core.ui.theme.AmlethMPTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -19,13 +29,24 @@ class LoginScreenTest {
     @get:Rule
     val composeRule = createComposeRule()
 
+    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    /** Texts are read from resources so the tests pass in whichever language the device uses. */
+    private fun text(@StringRes id: Int) = context.getString(id)
+
     private fun setContent(
         uiState: LoginUiState,
-        onSignIn: (SignInMethod) -> Unit = {}
+        onSignIn: (SignInMethod) -> Unit = {},
+        toastState: AMPToastState = AMPToastState()
     ) {
         composeRule.setContent {
-            AmlethMPTheme {
-                LoginScreen(uiState = uiState, onSignIn = onSignIn)
+            AMPTheme {
+                CompositionLocalProvider(LocalToastState provides toastState) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        LoginScreen(uiState = uiState, onSignIn = onSignIn)
+                        AMPToastHost(state = toastState)
+                    }
+                }
             }
         }
     }
@@ -34,10 +55,10 @@ class LoginScreenTest {
     fun idle_showsAllSignInOptions() {
         setContent(LoginUiState.Idle)
 
-        composeRule.onNodeWithText("Continue with Google").assertIsEnabled()
-        composeRule.onNodeWithText("Continue with Discord").assertIsEnabled()
-        composeRule.onNodeWithText("Continue as guest").assertIsEnabled()
-        composeRule.onNodeWithText("Guest sessions don't save your library.").assertExists()
+        composeRule.onNodeWithText(text(R.string.login_continue_google)).assertIsEnabled()
+        composeRule.onNodeWithText(text(R.string.login_continue_discord)).assertIsEnabled()
+        composeRule.onNodeWithText(text(R.string.login_continue_guest)).assertIsEnabled()
+        composeRule.onNodeWithText(text(R.string.login_guest_hint)).assertExists()
     }
 
     @Test
@@ -45,9 +66,9 @@ class LoginScreenTest {
         val methods = mutableListOf<SignInMethod>()
         setContent(LoginUiState.Idle, onSignIn = { methods += it })
 
-        composeRule.onNodeWithText("Continue with Google").performClick()
-        composeRule.onNodeWithText("Continue with Discord").performClick()
-        composeRule.onNodeWithText("Continue as guest").performClick()
+        composeRule.onNodeWithText(text(R.string.login_continue_google)).performClick()
+        composeRule.onNodeWithText(text(R.string.login_continue_discord)).performClick()
+        composeRule.onNodeWithText(text(R.string.login_continue_guest)).performClick()
 
         assertEquals(listOf(SignInMethod.Google, SignInMethod.Discord, SignInMethod.Guest), methods)
     }
@@ -56,23 +77,23 @@ class LoginScreenTest {
     fun signingIn_lockedButtonsAndShowsProgressLabel() {
         setContent(LoginUiState.SigningIn(SignInMethod.Google))
 
-        composeRule.onNodeWithText("Signing in…").assertIsNotEnabled()
-        composeRule.onNodeWithText("Continue with Discord").assertIsNotEnabled()
-        composeRule.onNodeWithText("Continue as guest").assertIsNotEnabled()
+        composeRule.onNodeWithText(text(R.string.login_signing_in)).assertIsNotEnabled()
+        composeRule.onNodeWithText(text(R.string.login_continue_discord)).assertIsNotEnabled()
+        composeRule.onNodeWithText(text(R.string.login_continue_guest)).assertIsNotEnabled()
     }
 
     @Test
-    fun error_showsMessageAndKeepsButtonsEnabledForRetry() {
+    fun error_showsAToastAndKeepsButtonsEnabledForRetry() {
         setContent(LoginUiState.Error)
 
-        composeRule.onNodeWithText("Something went wrong while signing in. Please try again.").assertExists()
-        composeRule.onNodeWithText("Continue with Google").assertIsEnabled()
+        composeRule.onNodeWithText(text(R.string.login_error)).assertExists()
+        composeRule.onNodeWithText(text(R.string.login_continue_google)).assertIsEnabled()
     }
 
     @Test
     fun idle_doesNotShowErrorMessage() {
         setContent(LoginUiState.Idle)
 
-        composeRule.onNodeWithText("Something went wrong while signing in. Please try again.").assertDoesNotExist()
+        composeRule.onNodeWithText(text(R.string.login_error)).assertDoesNotExist()
     }
 }

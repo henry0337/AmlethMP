@@ -5,7 +5,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import dev.myrlennia237.amlethmp.core.ui.device.P10Preview
 import dev.myrlennia237.amlethmp.core.ui.device.P10ProPreview
-import dev.myrlennia237.amlethmp.core.ui.theme.AmlethMPTheme
+import dev.myrlennia237.amlethmp.core.ui.theme.AMPTheme
 import dev.myrlennia237.amlethmp.screen.login.data.SignInMethod
 
 @P10Preview
@@ -14,7 +14,7 @@ import dev.myrlennia237.amlethmp.screen.login.data.SignInMethod
 private fun LoginScreenPreview(
     @PreviewParameter(LoginUiStateProvider::class) uiState: LoginUiState
 ) {
-    AmlethMPTheme {
+    AMPTheme {
         LoginScreen(uiState = uiState, onSignIn = {})
     }
 }

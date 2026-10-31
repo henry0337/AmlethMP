@@ -1,19 +1,21 @@
 <resources>
-    <string name="app_name">AmlethMP</string>
+    <string name="app_name" translatable="false">AmlethMP</string>
 
-    <string name="login_title">Music that moves with you.</string>
-    <string name="login_subtitle">Sign in to sync your library and playlists on every device.</string>
-    <string name="login_error">Something went wrong while signing in. Please try again.</string>
-    <string name="login_continue_google">Continue with Google</string>
-    <string name="login_continue_discord">Continue with Discord</string>
-    <string name="login_signing_in">Signing in…</string>
-    <string name="login_divider_or">or</string>
-    <string name="login_continue_guest">Continue as guest</string>
-    <string name="login_guest_hint">Guest sessions don\'t save your library.</string>
-    <string name="login_legal">By continuing, you agree to our %1$s and %2$s.</string>
-    <string name="login_legal_terms">Terms of Service</string>
-    <string name="login_legal_privacy">Privacy Policy</string>
+    <string name="login_title">Âm nhạc luôn bên bạn</string>
+    <string name="login_subtitle">Đăng nhập để có trải nghiệm trọn vẹn nhất</string>
+    <string name="login_error">Đã có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.</string>
+    <string name="login_continue_google">Đăng nhập bằng Google</string>
+    <string name="login_continue_discord">Liên kết với Discord</string>
+    <string name="login_signing_in">Đang đăng nhập…</string>
+    <string name="login_divider_or">hoặc</string>
+    <string name="login_continue_guest">Tiếp tục với tư cách khách</string>
+    <string name="login_guest_hint">Ứng dụng sẽ không lưu bất cứ thông tin gì về bạn cho đến khi đăng nhập</string>
+    <string name="login_legal">Bằng việc tiếp tục, bạn đồng ý với %1$s và %2$s của chúng tôi.</string>
+    <string name="login_legal_terms">Điều khoản dịch vụ</string>
+    <string name="login_legal_privacy">Chính sách quyền riêng tư</string>
     <string name="login_logo_description">AmlethMP</string>
 
-    <string name="home_placeholder">Signed in</string>
+    <string name="home_placeholder">Đã đăng nhập</string>
+
+    <string name="toast_close">Đóng thông báo</string>
 </resources>
