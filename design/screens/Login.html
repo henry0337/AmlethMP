@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -173,7 +173,7 @@
     }
 
     /* ---------- Tablet: centered card ---------- */
-    @media (min-width: 768px) {
+    @media (min-width: 600px) {
       .login__panel {
         align-items: center;
         padding: var(--space-7);
@@ -253,6 +253,228 @@
         text-align: center;
       }
     }
+
+    /* ---------- Large screens: the whole UI is scaled up so it stays easy to read ---------- */
+    /* Desktop 1440x900 - 1600x900 (about 1.15x) */
+    @media (min-width: 1280px) and (min-height: 900px) {
+      :root {
+        --control-height: 60px;
+        --space-2: 9px;
+        --space-3: 14px;
+        --space-4: 18px;
+        --space-5: 28px;
+        --space-6: 37px;
+        --space-7: 55px;
+        --font-size-xs: 0.86rem;
+        --font-size-sm: 1rem;
+        --font-size-md: 1.15rem;
+        --font-size-2xl: 2.3rem;
+        --font-size-3xl: 3.45rem;
+      }
+
+      .login__content {
+        max-width: 460px;
+      }
+
+      .login .brand__mark {
+        width: 83px;
+        height: 83px;
+      }
+    }
+
+    /* Desktop 1920x1080 and taller (about 1.3x) */
+    @media (min-width: 1280px) and (min-height: 1000px) {
+      :root {
+        --control-height: 68px;
+        --space-2: 10px;
+        --space-3: 16px;
+        --space-4: 21px;
+        --space-5: 31px;
+        --space-6: 42px;
+        --space-7: 62px;
+        --font-size-xs: 0.98rem;
+        --font-size-sm: 1.14rem;
+        --font-size-md: 1.3rem;
+        --font-size-2xl: 2.6rem;
+        --font-size-3xl: 3.9rem;
+      }
+
+      .login__content {
+        max-width: 520px;
+      }
+
+      .login .brand__mark {
+        width: 94px;
+        height: 94px;
+      }
+    }
+
+    /* Tall card layout, e.g. a 1920x1080 monitor rotated to portrait (about 1.3x) */
+    @media (min-width: 1000px) and (max-width: 1279px) and (min-height: 900px) {
+      :root {
+        --control-height: 68px;
+        --space-2: 10px;
+        --space-3: 16px;
+        --space-4: 21px;
+        --space-5: 31px;
+        --space-6: 42px;
+        --space-7: 62px;
+        --font-size-xs: 0.98rem;
+        --font-size-sm: 1.14rem;
+        --font-size-md: 1.3rem;
+        --font-size-2xl: 2.6rem;
+        --font-size-3xl: 3.9rem;
+      }
+
+      .login__content {
+        max-width: 600px;
+      }
+
+      .login .brand__mark {
+        width: 94px;
+        height: 94px;
+      }
+    }
+
+    /* ---------- Desktop with low height (1280x720 - 1366x768): tighter spacing so the error state still fits ---------- */
+    @media (min-width: 1280px) and (max-height: 840px) {
+      .login__panel {
+        padding: var(--space-5) var(--space-7);
+      }
+
+      .login__content {
+        gap: var(--space-5);
+      }
+
+      .login__title {
+        font-size: var(--font-size-2xl);
+      }
+
+      .login .brand__mark {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+    /* ---------- Small phone (portrait, low height such as 360x640): the whole screen is scaled to about 88% ---------- */
+    @media (max-width: 599px) and (max-height: 720px) and (orientation: portrait) {
+      :root {
+        --control-height: 46px;
+        --space-2: 7px;
+        --space-3: 11px;
+        --space-4: 14px;
+        --space-5: 21px;
+        --space-6: 28px;
+        --font-size-xs: 0.68rem;
+        --font-size-sm: 0.78rem;
+        --font-size-md: 0.9rem;
+        --font-size-2xl: 1.75rem;
+      }
+
+      .login .brand__mark {
+        width: 56px;
+        height: 56px;
+      }
+    }
+
+    /* ---------- Tablet landscape (short card): tighter spacing so the card fits the height ---------- */
+    @media (min-width: 600px) and (max-width: 1279px) and (max-height: 799px) {
+      .login__panel {
+        padding: var(--space-4);
+      }
+
+      .login__content {
+        gap: var(--space-4);
+        padding: var(--space-5) var(--space-6);
+      }
+
+      .login__title {
+        font-size: var(--font-size-2xl);
+      }
+
+      .login .brand__mark {
+        width: 56px;
+        height: 56px;
+      }
+    }
+
+    /* ---------- Phone landscape (very short): two columns, intro on the left, actions on the right ---------- */
+    @media (orientation: landscape) and (max-height: 520px) and (max-width: 1279px) {
+      .login {
+        --control-height: 44px;
+      }
+
+      .login__panel {
+        align-items: center;
+        padding: var(--space-2) var(--space-5);
+      }
+
+      .login .alert {
+        padding: var(--space-2) var(--space-3);
+      }
+
+      .login__content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+        gap: var(--space-2) var(--space-5);
+        max-width: 840px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        text-align: left;
+      }
+
+      /* Actions are flattened into the grid so the error message can sit in the left column, under the intro. */
+      .login__actions {
+        display: contents;
+      }
+
+      .login__intro {
+        grid-column: 1;
+        grid-row: 1 / span 4;
+        margin-block: 0;
+      }
+
+      .login__error {
+        grid-column: 1;
+        grid-row: 5 / span 2;
+        align-self: start;
+        text-align: center;
+      }
+
+      .login__google { grid-column: 2; grid-row: 1; }
+      .login__discord { grid-column: 2; grid-row: 2; }
+      .login__divider { grid-column: 2; grid-row: 3; }
+      .login__guest { grid-column: 2; grid-row: 4; }
+
+      .login .brand {
+        align-self: flex-start;
+      }
+
+      .login .brand__mark {
+        width: 56px;
+        height: 56px;
+      }
+
+      .login__title {
+        font-size: var(--font-size-2xl);
+      }
+
+      .login__legal {
+        grid-column: 2;
+        grid-row: 6;
+        margin-top: var(--space-1);
+        text-align: center;
+      }
+
+      .login__hint {
+        grid-column: 2;
+        grid-row: 5;
+        text-align: center;
+      }
+    }
   </style>
 </head>
 <body>
@@ -267,12 +489,12 @@
           <div class="brand">
             <img class="brand__mark" src="../assets/logo-mark.svg" alt="AmlethMP">
           </div>
-          <h1 class="login__title">Music that moves with you.</h1>
-          <p class="login__subtitle">Sign in to sync your library and playlists on every device.</p>
+          <h1 class="login__title">Âm nhạc luôn bên bạn</h1>
+          <p class="login__subtitle">Đăng nhập để có trải nghiệm trọn vẹn nhất</p>
         </div>
 
         <div class="login__actions">
-          <p class="alert login__error" role="alert">Something went wrong while signing in. Please try again.</p>
+          <p class="alert login__error" role="alert">Đã có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.</p>
 
           <button class="btn btn--primary login__google" type="button">
             <svg class="btn__icon" viewBox="0 0 48 48" aria-hidden="true">
@@ -282,8 +504,8 @@
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
             </svg>
             <span class="btn__spinner" aria-hidden="true"></span>
-            <span class="label--idle">Continue with Google</span>
-            <span class="label--loading">Signing in…</span>
+            <span class="label--idle">Đăng nhập bằng Google</span>
+            <span class="label--loading">Đang đăng nhập…</span>
           </button>
 
           <button class="btn btn--discord login__discord" type="button">
@@ -291,18 +513,23 @@
               <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
             </svg>
             <span class="btn__spinner" aria-hidden="true"></span>
-            <span class="label--idle">Continue with Discord</span>
-            <span class="label--loading">Signing in…</span>
+            <span class="label--idle">Liên kết với Discord</span>
+            <span class="label--loading">Đang đăng nhập…</span>
           </button>
 
-          <div class="login__divider" aria-hidden="true">or</div>
+          <div class="login__divider" aria-hidden="true">hoặc</div>
 
-          <button class="btn btn--secondary login__guest" type="button">Continue as guest</button>
-          <p class="login__hint">Guest sessions don't save your library.</p>
+          <button class="btn btn--secondary login__guest" type="button">
+            <svg class="btn__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2m0 10c2.7 0 5.8 1.29 6 2H6c.23-.72 3.31-2 6-2m0-12C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 10c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span>Tiếp tục với tư cách khách</span>
+          </button>
+          <p class="login__hint">Ứng dụng sẽ không lưu bất cứ thông tin gì về bạn cho đến khi đăng nhập</p>
         </div>
 
         <p class="login__legal">
-          By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+          Bằng việc tiếp tục, bạn đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách quyền riêng tư</a> của chúng tôi.
         </p>
       </div>
     </section>

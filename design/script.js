@@ -1,6 +1,6 @@
 /* Shared design scripts.
    - Screens: ?state=loading | error sets data-state on <html> so a screen can show that state.
-   - Overview (index.html): screen list, device presets and state buttons for the live preview. */
+   - Overview (index.html): screen list, device presets, portrait/landscape and state buttons for the live preview. */
 
 (function () {
   var params = new URLSearchParams(location.search);
@@ -13,7 +13,15 @@
   var stage = document.getElementById('stage');
   var wrap = document.getElementById('frameWrap');
   var sizeLabel = document.getElementById('sizeLabel');
-  var current = { src: null, state: '', w: 390, h: 844 };
+  // `short` and `long` are the two sides of the selected device; orientation decides which one is the width.
+  var current = { src: null, state: '', short: 427, long: 952, orient: 'portrait', w: 427, h: 952 };
+
+  function applyOrientation() {
+    var portrait = current.orient === 'portrait';
+    current.w = portrait ? current.short : current.long;
+    current.h = portrait ? current.long : current.short;
+    activate('.orient', document.querySelector('.orient[data-orient="' + current.orient + '"]'));
+  }
 
   function fit() {
     var pad = 32;
@@ -47,16 +55,26 @@
   });
 
   // Mobile / Tablet / Desktop dropdowns: picking a size in one resets the other two.
+  // The selected orientation is kept when switching device, so only the Portrait / Landscape chips change it.
   var sizeSelects = document.querySelectorAll('.preset-select');
   sizeSelects.forEach(function (select) {
     select.addEventListener('change', function () {
-      var size = select.value.split('x');
-      current.w = Number(size[0]);
-      current.h = Number(size[1]);
+      var size = select.value.split('x').map(Number);
+      current.short = Math.min(size[0], size[1]);
+      current.long = Math.max(size[0], size[1]);
       sizeSelects.forEach(function (other) {
         if (other !== select) other.selectedIndex = 0;
         other.classList.toggle('is-active', other === select);
       });
+      applyOrientation();
+      fit();
+    });
+  });
+
+  document.querySelectorAll('.orient').forEach(function (el) {
+    el.addEventListener('click', function () {
+      current.orient = el.dataset.orient;
+      applyOrientation();
       fit();
     });
   });
@@ -72,6 +90,6 @@
   window.addEventListener('resize', fit);
 
   document.querySelector('.screen').click();
-  sizeSelects[0].value = '440x956';
+  sizeSelects[0].value = '427x952';
   sizeSelects[0].dispatchEvent(new Event('change'));
 })();
