@@ -3,6 +3,8 @@ package dev.myrlennia237.amlethmp.core.session
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.crypto.tink.Aead
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.io.IOException
@@ -39,7 +41,9 @@ class EncryptedSessionSerializer(
 
         try {
             val plain = json.encodeToString(t).encodeToByteArray()
-            output.write(aead().encrypt(plain, ASSOCIATED_DATA))
+            withContext(Dispatchers.IO) {
+                output.write(aead().encrypt(plain, ASSOCIATED_DATA))
+            }
         } catch (e: GeneralSecurityException) {
             throw IOException("Cannot encrypt the session", e)
         }
