@@ -2,8 +2,8 @@
    AmlethMP design system — dark mode only.
    Design tokens live in :root and are the single source of truth.
    Breakpoints (media queries cannot read custom properties):
-     mobile  < 768px
-     tablet  768px – 1279px
+     mobile  < 600px  (Android compact width; a 720px-wide viewport is a rotated monitor, not a phone)
+     tablet  600px – 1279px
      desktop 1280px – 1920px
    ========================================================================== */
 
@@ -81,7 +81,6 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size-md);
   line-height: var(--line-height-body);
-  -webkit-font-smoothing: antialiased;
 }
 
 h1,

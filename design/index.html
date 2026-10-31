@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AmlethMP Design</title>
+  <title>AmlethMP</title>
   <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <style>
@@ -179,20 +179,18 @@
 
 <body>
   <aside class="sidebar">
-    <div class="brand"><img class="brand__mark" src="assets/logo-mark.svg" alt=""><span>AmlethMP Design</span></div>
+    <div class="brand"><img class="brand__mark" src="assets/logo-mark.svg" alt=""><span>AmlethMP</span></div>
 
     <div>
-      <h2>Screens</h2>
+      <h2>Màn hình</h2>
       <div class="list">
-        <button class="screen" type="button" data-src="screens/Login.html">Login <span class="tag">In
-            review</span></button>
+        <button class="screen" type="button" data-src="screens/Login.html">Login <span class="tag">Đang duyệt</span></button>
       </div>
     </div>
 
     <div>
-      <h2>Overview</h2>
+      <h2>Tổng quan</h2>
       <div class="list">
-        <a class="link" href="States.html">States</a>
         <a class="link" href="Icon.html">Icon</a>
       </div>
     </div>
@@ -200,23 +198,20 @@
 
   <main class="viewer">
     <div class="toolbar">
-      <div class="group" aria-label="Device size">
-        <select class="chip select preset-select" aria-label="Mobile size">
-          <option value="" disabled hidden>Mobile</option>
-          <option value="360x780">Galaxy S25 (360×780)</option>
-          <option value="412x915">Galaxy S25 Ultra (412×915)</option>
-          <option value="393x852">iPhone 16 (393×852)</option>
-          <option value="440x956">iPhone 16 Pro Max (440×956)</option>
+      <div class="group" aria-label="Kích thước thiết bị">
+        <select class="chip select preset-select" aria-label="Kích thước điện thoại">
+          <option value="" disabled hidden>Điện thoại</option>
+          <option value="360x640">Small Phone (360×640)</option>
+          <option value="411x914">Medium Phone (411×914)</option>
+          <option value="411x923">Pixel 10 (411×923)</option>
+          <option value="427x952">Pixel 10 Pro (427×952)</option>
         </select>
-        <select class="chip select preset-select" aria-label="Tablet size">
-          <option value="" disabled hidden selected>Tablet</option>
-          <option value="712x1138">Galaxy Tab S9 (712×1138)</option>
-          <option value="800x1280">Galaxy Tab S9+ (800×1280)</option>
-          <option value="820x1180">iPad (820×1180)</option>
-          <option value="834x1210">iPad Pro (834×1210)</option>
+        <select class="chip select preset-select" aria-label="Kích thước máy tính bảng">
+          <option value="" disabled hidden selected>Máy tính bảng</option>
+          <option value="800x1280">Pixel Tablet (800×1280)</option>
         </select>
-        <select class="chip select preset-select" aria-label="Desktop size">
-          <option value="" disabled hidden selected>Desktop</option>
+        <select class="chip select preset-select" aria-label="Kích thước máy tính">
+          <option value="" disabled hidden selected>Máy tính</option>
           <option value="1280x720">1280×720</option>
           <option value="1366x768">1366×768</option>
           <option value="1440x900">1440×900</option>
@@ -224,18 +219,22 @@
           <option value="1920x1080">1920×1080</option>
         </select>
       </div>
-      <div class="group" aria-label="Screen state">
-        <button class="chip state is-active" type="button" data-state="">Default</button>
-        <button class="chip state" type="button" data-state="loading">Loading · Google</button>
-        <button class="chip state" type="button" data-state="loading-discord">Loading · Discord</button>
-        <button class="chip state" type="button" data-state="error">Error</button>
+      <div class="group" aria-label="Hướng màn hình">
+        <button class="chip orient is-active" type="button" data-orient="portrait">Dọc</button>
+        <button class="chip orient" type="button" data-orient="landscape">Ngang</button>
+      </div>
+      <div class="group" aria-label="Trạng thái màn hình">
+        <button class="chip state is-active" type="button" data-state="">Mặc định</button>
+        <button class="chip state" type="button" data-state="loading">Đang tải · Google</button>
+        <button class="chip state" type="button" data-state="loading-discord">Đang tải · Discord</button>
+        <button class="chip state" type="button" data-state="error">Lỗi</button>
       </div>
       <span class="size" id="sizeLabel"></span>
     </div>
 
     <div class="stage" id="stage">
       <div class="frame-wrap" id="frameWrap">
-        <iframe id="frame" title="Screen preview"></iframe>
+        <iframe id="frame" title="Xem trước màn hình"></iframe>
       </div>
     </div>
   </main>
