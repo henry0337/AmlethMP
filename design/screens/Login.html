@@ -131,13 +131,14 @@
     }
 
     /* States: set with ?state=loading (Google) | loading-discord | error (see script.js) */
-    .login__error,
+    .toast-region,
     .label--loading {
       display: none;
     }
 
-    html[data-state="error"] .login__error {
-      display: block;
+    /* The error state shows the shared toast component (see style.css) at the top of the screen */
+    html[data-state="error"] .toast-region {
+      display: flex;
     }
 
     /* The provider button being used swaps its icon and label for a spinner */
@@ -409,8 +410,9 @@
         padding: var(--space-2) var(--space-5);
       }
 
-      .login .alert {
-        padding: var(--space-2) var(--space-3);
+      /* Less room above the content, so the toast sits closer to the top edge */
+      .toast-region {
+        top: var(--space-3);
       }
 
       .login__content {
@@ -426,7 +428,7 @@
         text-align: left;
       }
 
-      /* Actions are flattened into the grid so the error message can sit in the left column, under the intro. */
+      /* Actions are flattened into the grid: the buttons stack on the right while the intro spans the left column. */
       .login__actions {
         display: contents;
       }
@@ -435,13 +437,6 @@
         grid-column: 1;
         grid-row: 1 / span 4;
         margin-block: 0;
-      }
-
-      .login__error {
-        grid-column: 1;
-        grid-row: 5 / span 2;
-        align-self: start;
-        text-align: center;
       }
 
       .login__google { grid-column: 2; grid-row: 1; }
@@ -494,8 +489,6 @@
         </div>
 
         <div class="login__actions">
-          <p class="alert login__error" role="alert">Đã có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.</p>
-
           <button class="btn btn--primary login__google" type="button">
             <svg class="btn__icon" viewBox="0 0 48 48" aria-hidden="true">
               <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
@@ -533,6 +526,20 @@
         </p>
       </div>
     </section>
+
+    <div class="toast-region">
+      <div class="toast toast--error" role="alert" data-duration="5000">
+        <svg class="toast__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+        </svg>
+        <p class="toast__message">Đã có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.</p>
+        <button class="toast__close" type="button" aria-label="Đóng thông báo">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
   </main>
 
   <script src="../script.js"></script>
