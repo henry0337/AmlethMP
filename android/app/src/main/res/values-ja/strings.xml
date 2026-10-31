@@ -1,0 +1,19 @@
+<resources>
+    <string name="login_title">いつもあなたのそばに音楽を</string>
+    <string name="login_subtitle">ログインして、すべての機能をご利用ください</string>
+    <string name="login_error">ログイン中にエラーが発生しました。もう一度お試しください。</string>
+    <string name="login_continue_google">Googleでログイン</string>
+    <string name="login_continue_discord">Discordと連携</string>
+    <string name="login_signing_in">ログイン中…</string>
+    <string name="login_divider_or">または</string>
+    <string name="login_continue_guest">ゲストとして続ける</string>
+    <string name="login_guest_hint">ログインするまで、アプリはあなたに関する情報を一切保存しません</string>
+    <string name="login_legal">続行すると、%1$sと%2$sに同意したものとみなされます。</string>
+    <string name="login_legal_terms">利用規約</string>
+    <string name="login_legal_privacy">プライバシーポリシー</string>
+    <string name="login_logo_description">AmlethMP</string>
+
+    <string name="home_placeholder">ログインしました</string>
+
+    <string name="toast_close">通知を閉じる</string>
+</resources>

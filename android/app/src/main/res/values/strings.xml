@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">AmlethMP</string>
+    <string name="app_name" translatable="false">AmlethMP</string>
+
+    <string name="login_title">Âm nhạc luôn bên bạn</string>
+    <string name="login_subtitle">Đăng nhập để có trải nghiệm trọn vẹn nhất</string>
+    <string name="login_error">Đã có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.</string>
+    <string name="login_continue_google">Đăng nhập bằng Google</string>
+    <string name="login_continue_discord">Liên kết với Discord</string>
+    <string name="login_signing_in">Đang đăng nhập…</string>
+    <string name="login_divider_or">hoặc</string>
+    <string name="login_continue_guest">Tiếp tục với tư cách khách</string>
+    <string name="login_guest_hint">Ứng dụng sẽ không lưu bất cứ thông tin gì về bạn cho đến khi đăng nhập</string>
+    <string name="login_legal">Bằng việc tiếp tục, bạn đồng ý với %1$s và %2$s của chúng tôi.</string>
+    <string name="login_legal_terms">Điều khoản dịch vụ</string>
+    <string name="login_legal_privacy">Chính sách quyền riêng tư</string>
+    <string name="login_logo_description">AmlethMP</string>
+
+    <string name="home_placeholder">Đã đăng nhập</string>
+
+    <string name="toast_close">Đóng thông báo</string>
 </resources>
