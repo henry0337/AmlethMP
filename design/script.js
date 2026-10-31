@@ -1,11 +1,51 @@
 /* Shared design scripts.
-   - Screens: ?state=loading | error sets data-state on <html> so a screen can show that state.
+   - Screens: ?state=loading | loading-discord | error sets data-state on <html> so a screen can show that state.
+   - Toast: the close button and the optional data-duration (ms) auto-hide, see setupToast.
    - Overview (index.html): screen list, device presets, portrait/landscape and state buttons for the live preview. */
 
 (function () {
   var params = new URLSearchParams(location.search);
   var state = params.get('state');
   if (state) document.documentElement.dataset.state = state;
+
+  // Toast: closes with the X button and, when data-duration (ms) is set, hides itself after that time.
+  // The countdown pauses while the pointer is over the toast and continues with the time left.
+  function setupToast(toast) {
+    var region = toast.closest('.toast-region');
+    var left = Number(toast.dataset.duration) || 0;
+    var startedAt = 0;
+    var timer;
+
+    function hide() {
+      clearTimeout(timer);
+      toast.classList.add('is-leaving');
+      // Same length as the toast-out animation in style.css
+      setTimeout(function () { region.style.display = 'none'; }, 180);
+    }
+
+    function start() {
+      if (!left || toast.classList.contains('is-leaving')) return;
+      startedAt = Date.now();
+      timer = setTimeout(hide, left);
+    }
+
+    function pause() {
+      if (!left) return;
+      clearTimeout(timer);
+      left -= Date.now() - startedAt;
+    }
+
+    toast.querySelector('.toast__close').addEventListener('click', hide);
+    toast.addEventListener('mouseenter', pause);
+    toast.addEventListener('mouseleave', start);
+    start();
+  }
+
+  window.setupToast = setupToast;
+  document.querySelectorAll('.toast').forEach(function (toast) {
+    // Toasts listed as examples on the Toast page are static: their close buttons do nothing.
+    if (!toast.closest('.specimens')) setupToast(toast);
+  });
 
   var frame = document.getElementById('frame');
   if (!frame) return;
