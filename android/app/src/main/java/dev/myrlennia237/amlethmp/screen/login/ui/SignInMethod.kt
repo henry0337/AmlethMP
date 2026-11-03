@@ -1,4 +1,4 @@
-package dev.myrlennia237.amlethmp.screen.login.data.model
+package dev.myrlennia237.amlethmp.screen.login.ui
 
 /**
  * Các phương thức đăng nhập chính thức được hỗ trợ trong ứng dụng.

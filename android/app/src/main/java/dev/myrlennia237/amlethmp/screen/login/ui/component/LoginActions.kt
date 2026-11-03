@@ -22,19 +22,20 @@ import dev.myrlennia237.amlethmp.core.ui.theme.Discord
 import dev.myrlennia237.amlethmp.core.ui.theme.Light
 import dev.myrlennia237.amlethmp.core.ui.theme.OnLight
 import dev.myrlennia237.amlethmp.core.ui.theme.Spacing
-import dev.myrlennia237.amlethmp.screen.login.data.model.SignInMethod
+import dev.myrlennia237.amlethmp.screen.login.ui.LoginStatus
 import dev.myrlennia237.amlethmp.screen.login.ui.LoginUiState
+import dev.myrlennia237.amlethmp.screen.login.ui.SignInMethod
 
 @Composable
 internal fun LoginActions(
     uiState: LoginUiState,
-    onSignIn: (SignInMethod) -> Unit,
+    onSignInClick: (SignInMethod) -> Unit,
     modifier: Modifier = Modifier,
     spacing: Dp = Spacing.Space3,
     controlHeight: Dp = ControlHeight
 ) {
-    val activeMethod = (uiState as? LoginUiState.SigningIn)?.method
-    val isEnabled = uiState is LoginUiState.Idle || uiState is LoginUiState.Error
+    val activeMethod = (uiState.status as? LoginStatus.SigningIn)?.method
+    val isEnabled = uiState.status is LoginStatus.Idle
 
     Column(
         verticalArrangement = Arrangement.spacedBy(spacing),
@@ -49,7 +50,7 @@ internal fun LoginActions(
             containerColor = Light,
             contentColor = OnLight,
             minHeight = controlHeight,
-            onClick = { onSignIn(SignInMethod.Google) },
+            onClick = { onSignInClick(SignInMethod.Google) },
             icon = {
                 Image(
                     painter = painterResource(R.drawable.ic_google),
@@ -66,7 +67,7 @@ internal fun LoginActions(
             containerColor = Discord,
             contentColor = Light,
             minHeight = controlHeight,
-            onClick = { onSignIn(SignInMethod.Discord) },
+            onClick = { onSignInClick(SignInMethod.Discord) },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_discord),
@@ -87,7 +88,7 @@ internal fun LoginActions(
             contentColor = MaterialTheme.colorScheme.onBackground,
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
             minHeight = controlHeight,
-            onClick = { onSignIn(SignInMethod.Guest) },
+            onClick = { onSignInClick(SignInMethod.Guest) },
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.ic_person),

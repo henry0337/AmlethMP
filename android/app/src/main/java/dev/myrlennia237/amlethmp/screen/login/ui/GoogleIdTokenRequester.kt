@@ -1,6 +1,9 @@
-package dev.myrlennia237.amlethmp.screen.login.data.google
+package dev.myrlennia237.amlethmp.screen.login.ui
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
@@ -10,13 +13,16 @@ import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import dev.myrlennia237.amlethmp.BuildConfig
 
-class CredentialManagerGoogleIdTokenSource(
+// Credential Manager needs an Activity context and shows its own sheet, so this is UI logic: the
+// screen asks for the token here and hands only the resulting value to the ViewModel.
+internal class GoogleIdTokenRequester(
     private val context: Context,
     private val serverClientId: String
-) : GoogleIdTokenSource {
+) {
 
-    override suspend fun fetch(): Result<String> {
+    suspend fun request(): Result<String> {
         if (serverClientId.isBlank()) {
             return Result.failure(IllegalStateException("GOOGLE_WEB_CLIENT_ID is not set"))
         }
@@ -44,3 +50,11 @@ class CredentialManagerGoogleIdTokenSource(
         }
     }
 }
+
+@Composable
+internal fun rememberGoogleIdTokenRequester(): GoogleIdTokenRequester {
+    val context = LocalContext.current
+    return remember(context) { GoogleIdTokenRequester(context, BuildConfig.GOOGLE_WEB_CLIENT_ID) }
+}
+
+internal class GoogleSignInCancelledException : Exception("Google sign-in was cancelled")

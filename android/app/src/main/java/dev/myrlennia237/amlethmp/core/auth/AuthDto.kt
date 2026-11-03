@@ -1,4 +1,4 @@
-package dev.myrlennia237.amlethmp.screen.login.data.remote
+package dev.myrlennia237.amlethmp.core.auth
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,6 +1,7 @@
 package dev.myrlennia237.amlethmp.core.session
 
 import androidx.datastore.core.CorruptionException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -13,7 +14,7 @@ import java.io.ByteArrayOutputStream
 class EncryptedSessionSerializerTest {
 
     private val aead = newTestAead()
-    private val serializer = EncryptedSessionSerializer { aead }
+    private val serializer = EncryptedSessionSerializer({ aead }, Dispatchers.Unconfined)
 
     private suspend fun encrypt(session: Session?): ByteArray {
         val output = ByteArrayOutputStream()
@@ -57,7 +58,7 @@ class EncryptedSessionSerializerTest {
     @Test
     fun `bytes encrypted with another key are reported as corruption`() = runTest {
         val bytes = encrypt(testSession)
-        val otherKeySerializer = EncryptedSessionSerializer { newTestAead() }
+        val otherKeySerializer = EncryptedSessionSerializer({ newTestAead() }, Dispatchers.Unconfined)
 
         assertThrows(CorruptionException::class.java) {
             kotlinx.coroutines.runBlocking { otherKeySerializer.readFrom(ByteArrayInputStream(bytes)) }

@@ -1,5 +1,6 @@
 package dev.myrlennia237.amlethmp.screen.login.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,11 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -32,20 +31,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation3.runtime.NavKey
-import dev.myrlennia237.amlethmp.BuildConfig
 import dev.myrlennia237.amlethmp.R
 import dev.myrlennia237.amlethmp.core.ui.component.AMPScrollColumn
 import dev.myrlennia237.amlethmp.core.ui.component.LocalToastState
 import dev.myrlennia237.amlethmp.core.ui.theme.Spacing
-import dev.myrlennia237.amlethmp.screen.login.data.model.SignInMethod
-import dev.myrlennia237.amlethmp.screen.login.data.google.CredentialManagerGoogleIdTokenSource
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginActions
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginBackdrop
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginGuestHint
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginIntro
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginLegal
-import kotlinx.serialization.Serializable
 
 @Composable
 fun LoginRoute(
@@ -55,18 +49,37 @@ fun LoginRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val currentOnSignedIn by rememberUpdatedState(onSignedIn)
-    val context = LocalContext.current
-    val googleIdTokenSource = remember(context) {
-        CredentialManagerGoogleIdTokenSource(context, BuildConfig.GOOGLE_WEB_CLIENT_ID)
+    val googleIdTokenRequester = rememberGoogleIdTokenRequester()
+    val toastState = LocalToastState.current
+    val userMessageText = uiState.userMessage?.let { stringResource(it.textRes) }
+
+    LaunchedEffect(uiState.status) {
+        if (uiState.status is LoginStatus.SignedIn) currentOnSignedIn()
     }
 
-    LaunchedEffect(uiState) {
-        if (uiState is LoginUiState.SignedIn) currentOnSignedIn()
+    LaunchedEffect(uiState.isAwaitingGoogleIdToken) {
+        if (!uiState.isAwaitingGoogleIdToken) return@LaunchedEffect
+
+        googleIdTokenRequester.request().fold(
+            onSuccess = viewModel::googleIdTokenReceived,
+            onFailure = { cause ->
+                if (cause is GoogleSignInCancelledException) viewModel.googleSignInCancelled()
+                else viewModel.googleSignInFailed(cause)
+            }
+        )
+    }
+
+    // The toast is the whole display of the message, so it is acknowledged right after it is shown.
+    LaunchedEffect(userMessageText) {
+        if (userMessageText == null) return@LaunchedEffect
+
+        toastState.show(userMessageText)
+        viewModel.userMessageShown()
     }
 
     LoginScreen(
         uiState = uiState,
-        onSignIn = { method -> viewModel.onSignIn(method, googleIdTokenSource) },
+        onSignInClick = viewModel::signIn,
         modifier = modifier
     )
 }
@@ -74,16 +87,9 @@ fun LoginRoute(
 @Composable
 fun LoginScreen(
     uiState: LoginUiState,
-    onSignIn: (SignInMethod) -> Unit,
+    onSignInClick: (SignInMethod) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val toastState = LocalToastState.current
-    val errorMessage = stringResource(R.string.login_error)
-
-    LaunchedEffect(uiState) {
-        if (uiState is LoginUiState.Error) toastState.show(errorMessage)
-    }
-
     BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
@@ -95,9 +101,9 @@ fun LoginScreen(
         // The backdrop draws behind the system bars; only the content stays inside the safe area.
         Box(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
             when (layout) {
-                LoginLayout.Portrait -> LoginPortrait(uiState, onSignIn)
-                LoginLayout.SmallPortrait -> ScaledDown(SMALL_PHONE_SCALE) { LoginPortrait(uiState, onSignIn) }
-                LoginLayout.Landscape -> LoginLandscape(uiState, onSignIn)
+                LoginLayout.Portrait -> LoginPortrait(uiState, onSignInClick)
+                LoginLayout.SmallPortrait -> ScaledDown(SMALL_PHONE_SCALE) { LoginPortrait(uiState, onSignInClick) }
+                LoginLayout.Landscape -> LoginLandscape(uiState, onSignInClick)
             }
         }
     }
@@ -106,7 +112,7 @@ fun LoginScreen(
 @Composable
 private fun LoginPortrait(
     uiState: LoginUiState,
-    onSignIn: (SignInMethod) -> Unit
+    onSignInClick: (SignInMethod) -> Unit
 ) {
     AMPScrollColumn(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -137,7 +143,7 @@ private fun LoginPortrait(
                 .fillMaxWidth()
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.Space3)) {
-                LoginActions(uiState = uiState, onSignIn = onSignIn)
+                LoginActions(uiState = uiState, onSignInClick = onSignInClick)
                 LoginGuestHint()
             }
             LoginLegal(textAlign = TextAlign.Center)
@@ -148,7 +154,7 @@ private fun LoginPortrait(
 @Composable
 private fun LoginLandscape(
     uiState: LoginUiState,
-    onSignIn: (SignInMethod) -> Unit
+    onSignInClick: (SignInMethod) -> Unit
 ) {
     AMPScrollColumn(
         verticalArrangement = Arrangement.Center,
@@ -175,7 +181,7 @@ private fun LoginLandscape(
                 )
                 LoginActions(
                     uiState = uiState,
-                    onSignIn = onSignIn,
+                    onSignInClick = onSignInClick,
                     spacing = Spacing.Space2,
                     controlHeight = LANDSCAPE_CONTROL_HEIGHT,
                     modifier = Modifier.weight(1f)
@@ -222,9 +228,12 @@ internal fun loginLayout(width: Dp, height: Dp): LoginLayout = when {
     else -> LoginLayout.Portrait
 }
 
-@Serializable
-data object LoginKey : NavKey
-
+@get:StringRes
+private val LoginUserMessage.textRes: Int
+    get() = when (this) {
+        LoginUserMessage.SignInFailed -> R.string.login_error
+        LoginUserMessage.NetworkUnavailable -> R.string.login_error_network
+    }
 
 private const val SMALL_PHONE_SCALE = 0.88f
 

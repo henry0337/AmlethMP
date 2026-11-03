@@ -2,6 +2,7 @@
     <string name="login_title">Music that\'s always with you</string>
     <string name="login_subtitle">Sign in for the full experience</string>
     <string name="login_error">Something went wrong while signing in. Please try again.</string>
+    <string name="login_error_network">No network connection. Check your connection and try again.</string>
     <string name="login_continue_google">Sign in with Google</string>
     <string name="login_continue_discord">Link with Discord</string>
     <string name="login_signing_in">Signing in…</string>

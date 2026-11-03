@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -31,6 +32,7 @@ class DataStoreSessionRepositoryTest {
         val job = Job().also { jobs += it }
         val dataStore = createSessionDataStore(
             aead = { aead },
+            ioDispatcher = Dispatchers.IO,
             produceFile = { File(tempFolder.root, SESSION_FILE_NAME) },
             scope = CoroutineScope(Dispatchers.IO + job)
         )
@@ -38,19 +40,19 @@ class DataStoreSessionRepositoryTest {
     }
 
     @Test
-    fun `restore without a saved session returns null`() = runTest {
+    fun `a missing session emits null`() = runTest {
         val (repository, _) = newRepository()
 
-        assertNull(repository.restore())
+        assertNull(repository.session.first())
     }
 
     @Test
-    fun `save then restore returns the session`() = runTest {
+    fun `save then read returns the session`() = runTest {
         val (repository, _) = newRepository()
 
         repository.save(testSession)
 
-        assertEquals(testSession, repository.restore())
+        assertEquals(testSession, repository.session.first())
     }
 
     @Test
@@ -61,7 +63,7 @@ class DataStoreSessionRepositoryTest {
 
         val (second, _) = newRepository()
 
-        assertEquals(testSession, second.restore())
+        assertEquals(testSession, second.session.first())
     }
 
     @Test
@@ -71,7 +73,7 @@ class DataStoreSessionRepositoryTest {
 
         repository.clear()
 
-        assertNull(repository.restore())
+        assertNull(repository.session.first())
     }
 
     @Test
@@ -79,10 +81,10 @@ class DataStoreSessionRepositoryTest {
         File(tempFolder.root, SESSION_FILE_NAME).writeBytes(byteArrayOf(1, 2, 3, 4, 5))
         val (repository, _) = newRepository()
 
-        assertNull(repository.restore())
+        assertNull(repository.session.first())
 
         repository.save(testSession)
-        assertEquals(testSession, repository.restore())
+        assertEquals(testSession, repository.session.first())
     }
 
     @Test
@@ -94,10 +96,11 @@ class DataStoreSessionRepositoryTest {
         val job = Job().also { jobs += it }
         val otherKeyStore = createSessionDataStore(
             aead = { newTestAead() },
+            ioDispatcher = Dispatchers.IO,
             produceFile = { File(tempFolder.root, SESSION_FILE_NAME) },
             scope = CoroutineScope(Dispatchers.IO + job)
         )
 
-        assertNull(DataStoreSessionRepository(otherKeyStore).restore())
+        assertNull(DataStoreSessionRepository(otherKeyStore).session.first())
     }
 }

@@ -1,11 +1,11 @@
 package dev.myrlennia237.amlethmp.core.session
 
-import java.io.IOException
+import kotlinx.coroutines.flow.Flow
 
 interface SessionRepository {
-    suspend fun save(session: Session)
+    val session: Flow<Session?>
 
-    suspend fun restore(): Session?
+    suspend fun save(session: Session)
 
     suspend fun clear()
 }

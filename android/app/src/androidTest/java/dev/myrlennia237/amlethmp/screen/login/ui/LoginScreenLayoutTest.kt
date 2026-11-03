@@ -41,7 +41,7 @@ class LoginScreenLayoutTest {
         composeRule.setContent {
             AMPTheme {
                 Box(modifier = Modifier.requiredSize(width, height).testTag(SCREEN_TAG)) {
-                    LoginScreen(uiState = uiState, onSignIn = {})
+                    LoginScreen(uiState = uiState, onSignInClick = {})
                 }
             }
         }
@@ -78,28 +78,28 @@ class LoginScreenLayoutTest {
 
     @Test
     fun smallPhonePortrait_fitsTheScreen() {
-        setContent(360.dp, 640.dp, LoginUiState.Idle)
+        setContent(360.dp, 640.dp, LoginUiState())
 
         assertFits()
     }
 
     @Test
     fun normalPhonePortrait_fitsTheScreen() {
-        setContent(411.dp, 923.dp, LoginUiState.Idle)
+        setContent(411.dp, 923.dp, LoginUiState())
 
         assertFits()
     }
 
     @Test
     fun phoneLandscape_fitsTheScreen() {
-        setContent(923.dp, 411.dp, LoginUiState.Idle)
+        setContent(923.dp, 411.dp, LoginUiState())
 
         assertFits()
     }
 
     @Test
     fun smallPhoneLandscape_fitsTheScreen() {
-        setContent(640.dp, 360.dp, LoginUiState.Idle)
+        setContent(640.dp, 360.dp, LoginUiState())
 
         assertFits()
     }

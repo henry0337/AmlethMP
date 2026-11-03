@@ -4,6 +4,7 @@
     <string name="login_title">Âm nhạc luôn bên bạn</string>
     <string name="login_subtitle">Đăng nhập để có trải nghiệm trọn vẹn nhất</string>
     <string name="login_error">Đã có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.</string>
+    <string name="login_error_network">Không có kết nối mạng. Vui lòng kiểm tra kết nối rồi thử lại.</string>
     <string name="login_continue_google">Đăng nhập bằng Google</string>
     <string name="login_continue_discord">Liên kết với Discord</string>
     <string name="login_signing_in">Đang đăng nhập…</string>

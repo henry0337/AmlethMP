@@ -3,7 +3,7 @@ package dev.myrlennia237.amlethmp.core.session
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.crypto.tink.Aead
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -13,7 +13,8 @@ import java.io.OutputStream
 import java.security.GeneralSecurityException
 
 class EncryptedSessionSerializer(
-    private val aead: () -> Aead
+    private val aead: () -> Aead,
+    private val ioDispatcher: CoroutineDispatcher
 ) : Serializer<Session?> {
 
     override val defaultValue: Session? = null
@@ -37,7 +38,7 @@ class EncryptedSessionSerializer(
 
         try {
             val plain = json.encodeToString(t).encodeToByteArray()
-            withContext(Dispatchers.IO) {
+            withContext(ioDispatcher) {
                 output.write(aead().encrypt(plain, ASSOCIATED_DATA))
             }
         } catch (e: GeneralSecurityException) {

@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -36,6 +37,7 @@ class SessionKeystoreTest {
     private fun newRepository(job: Job) = DataStoreSessionRepository(
         createSessionDataStore(
             aead = { SessionAead.create(context) },
+            ioDispatcher = Dispatchers.IO,
             produceFile = { file },
             scope = CoroutineScope(Dispatchers.IO + job)
         )
@@ -48,7 +50,7 @@ class SessionKeystoreTest {
 
         repository.save(session)
 
-        assertEquals(session, repository.restore())
+        assertEquals(session, repository.session.first())
         job.cancelAndJoin()
     }
 
@@ -72,7 +74,7 @@ class SessionKeystoreTest {
         firstJob.cancelAndJoin()
 
         val secondJob = Job()
-        val restored = newRepository(secondJob).restore()
+        val restored = newRepository(secondJob).session.first()
         secondJob.cancelAndJoin()
 
         assertEquals(session, restored)
@@ -86,7 +88,7 @@ class SessionKeystoreTest {
 
         repository.clear()
 
-        assertNull(repository.restore())
+        assertNull(repository.session.first())
         job.cancelAndJoin()
     }
 }
