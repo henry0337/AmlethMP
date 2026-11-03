@@ -1,6 +1,8 @@
 # Android Coding Standards — Kotlin + Jetpack Compose
 
 > Áp dụng cho ứng dụng Android native dùng Kotlin và Jetpack Compose. Đây là baseline cho dự án mới; ưu tiên convention hiện có của repository nếu đã được thống nhất. Những nội dung là khuyến nghị nên được điều chỉnh theo quy mô và yêu cầu thực tế, không phải mọi mục đều là luật bắt buộc của Android.
+>
+> File này là tài liệu sống: khi một quyết định kiến trúc thay đổi, sửa rule tại đúng mục của nó và nêu lý do trong commit message. Phần data layer (mục 6) bám theo [hướng dẫn data layer của Android](https://developer.android.com/topic/architecture/data-layer); chỗ nào lệch hướng dẫn đó thì ghi rõ lý do ngay tại rule.
 
 ## 1. Project và dependency
 
@@ -20,7 +22,7 @@
 - Hằng số `const val`: `UPPER_SNAKE_CASE`, ví dụ `MAX_RETRY_COUNT`.
 - Đặt tên file `.kt` theo nội dung; tên class chính nên khớp tên file. Tránh tên mơ hồ như `Utils.kt`, `Common.kt` nếu không diễn tả đúng trách nhiệm.
 - Composable tạo UI dùng tên `PascalCase`, thường là danh từ hoặc tên thành phần, ví dụ `ProfileScreen`, `ProfileCard`.
-- Đặt tên theo nghiệp vụ: `ProfileUiState`, `ProfileRepository`, `ProfileViewModel`; chỉ tạo `UseCase` khi cần tách logic nghiệp vụ.
+- Đặt tên theo nghiệp vụ: `ProfileUiState`, `ProfileViewModel`; repository và data source đặt tên theo loại dữ liệu và nguồn (xem mục 6); chỉ tạo `UseCase` khi cần tách logic nghiệp vụ.
 - Ưu tiên `val`; tránh `!!`, mutable global state và ép kiểu không có kiểm chứng.
 - Ưu tiên named arguments khi lời gọi nhiều tham số cùng kiểu hoặc nếu tên tham số giúp làm rõ ý nghĩa.
 
@@ -31,6 +33,7 @@
 - Áp dụng unidirectional data flow (UDF): **state đi xuống UI, event/callback đi lên state holder**.
 - Để logic giao diện trong UI layer; business logic và điều phối dữ liệu thuộc ViewModel hoặc tầng thích hợp, không đặt trong Composable.
 - Ưu tiên tổ chức theo feature khi giúp tăng cohesion; đặt code dùng chung vào `core/` hoặc module tương đương khi có lý do rõ ràng.
+- Data layer tổ chức theo loại dữ liệu, không theo màn hình: dữ liệu chỉ một feature dùng nằm ở `screen/<feature>/data`; dữ liệu nhiều feature cùng dùng (xác thực, phiên đăng nhập, cài đặt) nằm ở `core/`.
 - Giữ module có cohesion cao, coupling thấp; chỉ tách multi-module khi mang lại lợi ích thực tế về ownership, build, reuse hoặc dependency boundaries.
 - Dùng dependency injection theo lựa chọn của repository (ví dụ Hilt hoặc framework hiện có); không đưa thêm DI framework chỉ vì convention này.
 - Tránh dùng `AndroidViewModel` hoặc đưa `Activity`, `View`, `Context` hay `Application` vào ViewModel nếu có thể chuyển dependency về UI/data layer.
@@ -39,12 +42,13 @@
 
 - Composable chủ yếu mô tả UI từ tham số/state; không thực hiện network, database hoặc side effect tùy tiện trong thân hàm.
 - Ưu tiên **stateless Composable**: nhận dữ liệu bất biến và callback như `onClick`, `onValueChange`; hoist state để caller kiểm soát khi có lợi cho tái sử dụng và kiểm thử.
+- Mỗi màn hình tách hai Composable: `XRoute` (stateful: lấy ViewModel, collect state, xử lý điều hướng và side effect UI như toast/snackbar) và `XScreen` (stateless: chỉ nhận `uiState` và callback, không side effect, không đọc `CompositionLocal` của nghiệp vụ). Composable con trong danh sách không nhận ViewModel; truyền sự kiện lên bằng lambda.
 - Hoist state lên lowest common ancestor có thể đọc và cập nhật state; giữ state càng gần nơi sử dụng càng tốt.
 - Mỗi Composable phát UI nên có một tham số `modifier: Modifier = Modifier` làm **tham số tùy chọn đầu tiên**, sau các tham số bắt buộc; áp dụng nó vào layout gốc và không khai báo nhiều tham số `Modifier`.
 - Thứ tự tham số Composable: tham số bắt buộc → `modifier` → tham số tùy chọn → trailing `@Composable` lambda (nếu có).
 - Không trả về giá trị từ Composable dùng để phát UI; truyền dữ liệu hoặc callback qua tham số.
 - Tách Composable khi trách nhiệm, khả năng tái sử dụng hoặc khả năng kiểm thử được cải thiện; không tách máy móc mọi node nhỏ thành file riêng.
-- Đặt tên callback dạng `onAction`, `onItemClick`, `onValueChange`; callback nên mô tả sự kiện, không chứa side effect bất ngờ.
+- Tham số callback của Composable đặt tên `on` + động từ + đối tượng (`onSignInClick`, `onItemClick`, `onValueChange`); callback mô tả sự kiện, không chứa side effect bất ngờ. Hàm của ViewModel xử lý sự kiện đặt tên bằng động từ (`signIn()`, `refresh()`, `userMessageShown()`), không có tiền tố `on`, để phân biệt hàm xử lý với callback.
 - Ưu tiên Material 3 hoặc design system đang dùng; lấy màu, typography, shape và spacing từ theme/design tokens thay vì hard-code rải rác.
 - Dùng resource (`stringResource`, `pluralStringResource`, `painterResource`, v.v.) cho nội dung cần bản địa hóa; không hard-code chuỗi UI cho ứng dụng đa ngôn ngữ.
 
@@ -58,7 +62,19 @@
 - Biểu diễn loading, content, empty và error theo yêu cầu của màn hình; không dùng Boolean rời rạc nếu dẫn đến tổ hợp trạng thái vô lý.
 - Dùng `LaunchedEffect` cho coroutine gắn với lifecycle/key của Composition; `DisposableEffect` cho đăng ký cần cleanup; `rememberCoroutineScope` cho coroutine được khởi chạy từ tương tác UI.
 - Không chạy coroutine, I/O hoặc sửa state trực tiếp mỗi lần Composable được gọi; không dùng `GlobalScope` hoặc `runBlocking` trong đường đi UI.
-- Không mặc định dùng Channel/SharedFlow cho mọi one-off UI event; ưu tiên state phản ánh kết quả có thể quan sát được và xử lý event trong state holder theo kiến trúc của dự án.
+- Không dùng Channel/SharedFlow cho event từ ViewModel lên UI: khi ViewModel sống lâu hơn UI, event có thể mất hoặc xử lý sai và để app ở trạng thái không nhất quán. Biến event thành state mà UI quan sát được (xem mục "UI state và event" bên dưới).
+
+### UI state và event
+
+- "State is; events happen": state luôn tồn tại và là đầu ra, event là đầu vào xảy ra rồi mất. Mọi event xuất phát từ ViewModel phải dẫn tới một lần cập nhật UI state; đừng nghĩ UI cần làm hành động gì, hãy nghĩ hành động đó làm state thay đổi ra sao.
+- Phân loại logic theo nơi xuất phát: logic nghiệp vụ (đăng nhập, lưu dữ liệu) ủy thác cho ViewModel; logic hiển thị (điều hướng, toast, snackbar, lấy chuỗi từ resource, trạng thái mở/đóng của một widget) ở lại UI. ViewModel không giữ chuỗi đã dịch; nó expose loại lỗi hoặc dữ liệu thô và UI ánh xạ sang `stringResource`.
+- Tổ chức UI state: gộp các state liên quan vào một object duy nhất để không lệch nhau; trong object đó dùng `sealed interface` cho nhóm trạng thái loại trừ nhau (ví dụ `Idle`/`SigningIn`/`SignedIn`) và field riêng cho phần độc lập. Không đặt sự kiện một lần (lỗi, thông báo) vào sealed state làm state dính.
+- Thông báo tạm thời cho người dùng (lỗi, toast, snackbar) là một field trong UI state (`userMessage`, hoặc danh sách có `id` khi có thể xếp hàng). UI hiển thị rồi gọi hàm xác nhận của ViewModel (`userMessageShown()`) để xóa nó khỏi state, nhờ đó thông báo không hiện lại khi xoay màn hình hay khi Composable vào lại composition.
+- Điều hướng do ViewModel kích hoạt cũng đi qua state (cờ hoàn tất, hoặc `Flow` từ data layer như phiên đăng nhập); `XRoute` quan sát rồi gọi callback do caller truyền vào (`rememberUpdatedState` cho callback trong `LaunchedEffect`). Điều hướng khởi nguồn từ thao tác bấm thì dùng `dropUnlessResumed`. Nếu màn hình nguồn còn nằm trong back stack, cần thêm cờ phía UI để không tự điều hướng lại.
+- Logic UI cần Android SDK (Credential Manager, xin permission, Activity result) nằm trong state holder thuần tạo ở UI (`rememberXState(context)`) và ViewModel chỉ nhận kết quả dưới dạng giá trị thuần. Không truyền đối tượng gắn với `Context`/Activity vào ViewModel dưới dạng tham số hay dependency.
+- Sản xuất state trong ViewModel: giữ `MutableStateFlow` private và cập nhật bằng `update { }`; state suy ra từ `Flow` của repository dùng `combine(...)` rồi `.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue)` để pipeline dừng khi UI không còn quan sát.
+- Không `launch` coroutine trong `init`/constructor của ViewModel (đối tượng chưa khởi tạo xong có thể bị đọc/ghi); dùng `stateIn` lazily hoặc hàm `initialize()` idempotent. `viewModelScope` không dùng cho công việc kéo dài từ 5 giây trở lên; dùng WorkManager.
+- Khi `catch` trong coroutine phải để `CancellationException` đi qua (ném lại, hoặc chỉ bắt các loại lỗi cụ thể).
 
 ## 6. ViewModel, coroutines và data layer
 
@@ -70,6 +86,46 @@
 - Inject dispatcher khi cần kiểm soát concurrency và testability; không hard-code dispatcher khắp business logic nếu khiến test khó viết.
 - Không nuốt exception bằng `catch` rỗng; chuyển lỗi có ý nghĩa thành trạng thái/kết quả phù hợp và giữ cancellation hoạt động đúng.
 - Dùng một nguồn dữ liệu chuẩn (single source of truth) cho mỗi loại state; tránh giữ bản sao mutable của cùng dữ liệu ở nhiều tầng.
+
+### Repository và data source
+
+- Mỗi loại dữ liệu có một repository, đặt tên `<Dữ liệu>Repository` theo dữ liệu mà nó quản lý (`AuthRepository`, `PlaylistRepository`), không theo màn hình hay hành động UI (`LoginRepository`).
+- Data source đặt tên `<Dữ liệu><Remote|Local>DataSource` (`AuthRemoteDataSource`, `SessionLocalDataSource`). Không đưa chi tiết triển khai vào tên (`DataStore`, `Retrofit`, `Room`) trừ khi đang chạy song song hai implementation trong lúc migration.
+- Giao tiếp backend qua Retrofit: interface Retrofit (`XApi`) chỉ khai báo endpoint và trả DTO; data source bọc nó và đổi lỗi HTTP/IO/serialization thành exception có kiểu của data layer. Retrofit `suspend` đã main-safe nên không bọc thêm `withContext`. Chỉ có một `Retrofit` và `OkHttpClient` dùng chung, dựng ở `NetworkModule`.
+- Mỗi data source chỉ làm việc với một nguồn (một API, một DataStore/database/file). Việc phối hợp nhiều nguồn, giải quyết xung đột và logic nghiệp vụ thuộc repository.
+- Repository nhận data source qua constructor và là điểm vào duy nhất của data layer; ViewModel, use case và Composable không giữ data source làm dependency hay tham số.
+- Được gộp repository và data source vào một class khi chỉ có đúng một nguồn và không phụ thuộc repository khác; tách ra ngay khi có nguồn thứ hai (ví dụ phiên đăng nhập vừa lưu local vừa refresh qua mạng).
+- Repository được phụ thuộc repository khác (ví dụ `AuthRepository` dùng `SessionRepository`), nhưng không tạo phụ thuộc vòng.
+- Thao tác của nền tảng cần Activity hoặc hiện UI (Credential Manager, xin permission, Activity result) thuộc UI layer, không phải data source. UI lấy kết quả (ví dụ Google ID token), rồi đưa giá trị thuần cho ViewModel và repository.
+- Mỗi interface data source cần ít nhất một implementation thật; fake chỉ phục vụ test (xem mục 11).
+
+### Model
+
+- Data source trả model của nguồn (DTO đánh dấu `internal`, có annotation serialization); repository map sang model của app. DTO không được lọt ra ngoài data layer.
+- Logic phát sinh khi map (tính thời điểm hết hạn, chuẩn hóa dữ liệu) thuộc repository. Thời gian lấy từ `Clock` hoặc provider được inject, không gọi `System.currentTimeMillis()` trực tiếp trong logic.
+- Model expose ra ngoài là immutable (`val`, `List` chỉ đọc). Model chứa token hoặc dữ liệu cá nhân override `toString()` để không lộ ra log.
+- Cấu hình serialization nhận response từ backend phải chịu được trường mới (`ignoreUnknownKeys = true`), vì backend có thể thêm trường mà không báo trước.
+
+### Dữ liệu thay đổi theo thời gian
+
+- Dữ liệu có thể đổi sau khi đọc (phiên đăng nhập, cài đặt, danh sách đã lưu) expose bằng `Flow` lấy từ source of truth, ví dụ `val session: Flow<Session?>`, không chỉ có hàm đọc một lần. Thao tác ghi và đọc một lần dùng `suspend`.
+- Dữ liệu cần tồn tại khi offline hoặc qua process death lấy nguồn local làm source of truth: DataStore cho dữ liệu nhỏ chỉ đọc/ghi nguyên khối, Room cho dữ liệu lớn hoặc cần truy vấn, file cho blob. Repository cập nhật nguồn local từ network; UI quan sát nguồn local.
+
+### Lỗi
+
+- Repository trả `Result<T>` cho thao tác một lần có lỗi dự kiến; luồng `Flow` dùng toán tử `catch`. Dùng một kiểu xử lý nhất quán trong toàn dự án.
+- Lỗi dự kiến là exception có kiểu rõ ràng (ví dụ không có mạng, bị từ chối xác thực, server lỗi, dữ liệu sai định dạng) để ViewModel map thành UI state phù hợp. Không gộp mọi lỗi vào một trạng thái `Error` chung nếu UI cần phản ứng khác nhau.
+- Chỉ bắt các loại lỗi dự kiến (`IOException`, `SerializationException`, `GeneralSecurityException`, …); không bắt `Exception`/`Throwable` rộng làm mất `CancellationException`.
+- Lỗi không hiển thị chi tiết cho người dùng vẫn phải để lại dấu vết (log chỉ ở debug hoặc crash reporting) gồm loại exception, thao tác và mã trạng thái, không kèm body response, token hay dữ liệu cá nhân.
+
+### Dispatcher, scope và vòng đời
+
+- Inject `CoroutineDispatcher` qua Hilt qualifier (`@IoDispatcher`, `@DefaultDispatcher`) được cung cấp ở một nơi; không ghi trực tiếp `Dispatchers.IO` trong module hay class.
+- Phân loại thao tác trước khi chọn scope:
+  - Gắn với màn hình (ví dụ đăng nhập): chạy trong `viewModelScope` và bị hủy khi rời màn hình.
+  - Cần sống lâu hơn màn hình (ví dụ refresh token, ghi cache): repository nhận một `@ApplicationScope CoroutineScope` qua constructor và chạy việc trong đó; không tự tạo `CoroutineScope` bên trong class.
+  - Không được mất khi process bị kill: dùng WorkManager.
+- Class giữ state trong bộ nhớ (cache) chọn scope DI theo thời gian cần sống: `@Singleton` nếu dùng toàn app, scope hẹp hơn nếu chỉ phục vụ một flow.
 
 ## 7. Lists, recomposition và performance
 
@@ -84,6 +140,7 @@
 
 - Dùng một giải pháp navigation nhất quán với codebase; khi bắt đầu dự án mới, đánh giá Navigation 3 cùng nhu cầu và mức độ phù hợp, không tự ý migrate dự án hiện hữu chỉ vì convention.
 - Điều hướng qua callback/route ở đúng tầng; tránh để reusable UI component tự sở hữu navigation toàn cục.
+- `NavKey` của mỗi màn hình đặt trong file riêng (`LoginKey.kt`), không để lẫn trong file Composable của màn hình.
 - Truyền ID hoặc dữ liệu tối thiểu qua route; tải dữ liệu đầy đủ từ repository tại màn hình đích khi phù hợp.
 - Xử lý back navigation, deep links, trạng thái khôi phục và lỗi điều hướng theo yêu cầu ứng dụng.
 - Dùng `dp` cho kích thước layout và `sp` cho text; tránh giả định mọi thiết bị có cùng kích thước, orientation hoặc font scale.
@@ -97,12 +154,14 @@
 - Hỗ trợ font scaling, TalkBack, bàn phím/điều hướng hỗ trợ nếu phù hợp với loại UI.
 - Dùng localized strings và plural resources; tránh ghép chuỗi thủ công khiến bản dịch không tự nhiên.
 - Kiểm tra loading, empty, error, offline và permission-denied states đối với flow cần thiết.
+- Thao tác cần mạng kiểm tra kết nối (`NetworkMonitor.isOnline`) trước khi mở bất kỳ luồng hệ thống nào (hộp chọn tài khoản, permission) hoặc gọi API; offline thì báo lỗi mất mạng ngay, không mở luồng đó. Thao tác không cần mạng (ví dụ tiếp tục với tư cách khách) không bị chặn. Kiểm tra này chỉ là lối thoát sớm: lỗi mạng xảy ra giữa chừng vẫn phải được xử lý bằng lỗi có kiểu của data layer.
 
 ## 10. Security và privacy
 
 - Chỉ yêu cầu permission tối thiểu và giải thích đúng mục đích; không giả định permission đã được cấp.
 - Dùng HTTPS/TLS; không tắt certificate validation trong production.
 - Không hard-code API secret trong source, `BuildConfig`, assets hoặc APK; giá trị đóng gói trong app không phải secret an toàn.
+- Định danh công khai (OAuth client ID, base URL của API) được đưa vào `BuildConfig` từ `local.properties` hoặc biến môi trường; không commit giá trị của môi trường riêng, và `local.properties` phải nằm trong `.gitignore`.
 - Không ghi token, mật khẩu, dữ liệu cá nhân hoặc payload nhạy cảm vào log/crash message.
 - Lưu dữ liệu nhạy cảm bằng cơ chế phù hợp với threat model; dùng Android Keystore cho key material khi thích hợp.
 - Validate dữ liệu từ network, intent, deep link, clipboard, file và input người dùng trước khi tin dùng.
@@ -113,6 +172,9 @@
 
 - Unit test business logic, ViewModel, mapping và repository khi có logic đáng kiểm tra.
 - Dùng fake/test double để test logic độc lập; unit test không phụ thuộc network thật hoặc backend bên ngoài.
+- Fake data source đặt trong source set test (hoặc `debug` khi cố ý cần chạy app offline), không để trong `main`.
+- Test không tự dựng lại cấu hình của production (`Json`, `OkHttpClient`, …); gọi chính provider hoặc factory của production (ví dụ `NetworkModule.provideJson()`) để cấu hình lệch bị bắt ngay ở test.
+- Test data source mạng bằng MockWebServer với response có đủ các trường như backend thật, kể cả trường app không dùng.
 - Dùng `kotlinx-coroutines-test` và test dispatcher/scheduler khi kiểm thử coroutine.
 - Viết Compose UI test để kiểm tra semantics, hiển thị state và tương tác quan trọng; không phụ thuộc quá mức vào cấu trúc nội bộ của UI.
 - Test các trạng thái chính: success, loading, empty, error và các trường hợp permission/offline nếu phù hợp.
@@ -133,7 +195,14 @@
 
 - Network/database call trong Composable.
 - Composable nắm business logic lớn hoặc state mutable toàn cục.
-- UI/ViewModel truy cập trực tiếp data source thay vì qua repository khi kiến trúc dự án yêu cầu abstraction.
+- UI/ViewModel truy cập trực tiếp data source thay vì qua repository, kể cả khi data source được truyền vào dưới dạng tham số hàm.
+- DTO của network/database lọt ra ngoài data layer.
+- Một trạng thái `Error` chung cho mọi loại lỗi, hoặc `catch` mà không để lại dấu vết nào.
+- `Dispatchers.IO` hoặc `CoroutineScope(...)` tạo ngay trong class thay vì được inject.
+- Fake nằm trong `main`; test dựng lại cấu hình production thay vì dùng chính nó.
+- Truyền đối tượng gắn với `Context`/Activity (hoặc lambda bao nó) vào hàm của ViewModel.
+- Giữ lỗi hoặc thông báo trong UI state sau khi đã hiển thị, khiến nó hiện lại khi xoay màn hình.
+- `launch` trong `init` của ViewModel, hoặc Composable "stateless" đọc `CompositionLocal` để gây side effect.
 - `GlobalScope`, `runBlocking` trên đường UI, `!!` thiếu lý do hoặc `catch` rỗng.
 - Public mutable state hoặc sửa trực tiếp dữ liệu nhận từ caller.
 - Lazy list không có key ổn định khi item có identity.
@@ -146,6 +215,14 @@
 - [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html)
 - [Android app architecture](https://developer.android.com/topic/architecture)
 - [Recommendations for Android architecture](https://developer.android.com/topic/architecture/recommendations)
+- [Data layer](https://developer.android.com/topic/architecture/data-layer)
+- [Build an offline-first app](https://developer.android.com/topic/architecture/data-layer/offline-first)
+- [Domain layer](https://developer.android.com/topic/architecture/domain-layer)
+- [UI layer](https://developer.android.com/topic/architecture/ui-layer)
+- [UI events](https://developer.android.com/topic/architecture/ui-layer/events)
+- [UI state production](https://developer.android.com/topic/architecture/ui-layer/state-production)
+- [Best practices for coroutines in Android](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Now in Android (sample tham chiếu)](https://github.com/android/nowinandroid)
 - [Compose UI architecture](https://developer.android.com/develop/ui/compose/architecture)
 - [State and Jetpack Compose](https://developer.android.com/develop/ui/compose/state)
 - [Where to hoist state](https://developer.android.com/develop/ui/compose/state-hoisting)
