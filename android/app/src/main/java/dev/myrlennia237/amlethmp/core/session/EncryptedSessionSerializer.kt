@@ -12,10 +12,6 @@ import java.io.InputStream
 import java.io.OutputStream
 import java.security.GeneralSecurityException
 
-/**
- * Stores the session as AEAD-encrypted JSON. An empty file means "no session".
- * [aead] is resolved on every call so a failure to reach the key only affects that call.
- */
 class EncryptedSessionSerializer(
     private val aead: () -> Aead
 ) : Serializer<Session?> {

@@ -16,7 +16,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object HomeKey : NavKey
 
-/** Temporary destination after sign-in; there is no Home design yet. */
 @Composable
 fun HomePlaceholderScreen(modifier: Modifier = Modifier) {
     Box(

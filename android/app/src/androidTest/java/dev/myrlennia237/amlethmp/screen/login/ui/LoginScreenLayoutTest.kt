@@ -4,11 +4,15 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import dev.myrlennia237.amlethmp.R
@@ -36,57 +40,69 @@ class LoginScreenLayoutTest {
     private fun setContent(width: Dp, height: Dp, uiState: LoginUiState) {
         composeRule.setContent {
             AMPTheme {
-                Box(modifier = Modifier.requiredSize(width, height)) {
+                Box(modifier = Modifier.requiredSize(width, height).testTag(SCREEN_TAG)) {
                     LoginScreen(uiState = uiState, onSignIn = {})
                 }
             }
         }
     }
 
-    private fun assertFits(width: Dp, height: Dp) {
-        val texts = buildList {
-            add(text(R.string.login_title))
-            add(text(R.string.login_continue_google))
-            add(text(R.string.login_continue_discord))
-            add(text(R.string.login_continue_guest))
-            add(text(R.string.login_guest_hint))
-        }
+    /**
+     * Positions are measured in pixels from the top-left of the box, because the box may not start at
+     * the window's origin and dp values inside a scaled-down layout use the scaled density.
+     */
+    private fun assertFits() {
+        val screen = composeRule.onNodeWithTag(SCREEN_TAG).pixelBounds()
+        val texts = listOf(
+            text(R.string.login_title),
+            text(R.string.login_continue_google),
+            text(R.string.login_continue_discord),
+            text(R.string.login_continue_guest),
+            text(R.string.login_guest_hint)
+        )
         texts.forEach { text ->
-            val bounds = composeRule.onNodeWithText(text).getUnclippedBoundsInRoot()
-            assertTrue(
-                "\"$text\" is outside ${width}x$height: $bounds",
-                bounds.left >= 0.dp && bounds.top >= 0.dp && bounds.right <= width && bounds.bottom <= height
-            )
+            val bounds = composeRule.onNodeWithText(text).pixelBounds()
+            assertTrue("\"$text\" is outside the screen: $bounds in $screen", screen.contains(bounds))
         }
-        val legal = composeRule.onNodeWithText(text(R.string.login_legal_terms), substring = true).getUnclippedBoundsInRoot()
-        assertTrue("legal notice is outside ${width}x$height: $legal", legal.bottom <= height)
+        val legal = composeRule.onNodeWithText(text(R.string.login_legal_terms), substring = true).pixelBounds()
+        assertTrue("legal notice is outside the screen: $legal in $screen", screen.contains(legal))
     }
+
+    private fun SemanticsNodeInteraction.pixelBounds(): Rect {
+        val node = fetchSemanticsNode()
+        return Rect(node.positionInRoot, node.size.toSize())
+    }
+
+    private fun Rect.contains(other: Rect) =
+        other.left >= left && other.top >= top && other.right <= right && other.bottom <= bottom
 
     @Test
     fun smallPhonePortrait_fitsTheScreen() {
         setContent(360.dp, 640.dp, LoginUiState.Idle)
 
-        assertFits(360.dp, 640.dp)
+        assertFits()
     }
 
     @Test
     fun normalPhonePortrait_fitsTheScreen() {
         setContent(411.dp, 923.dp, LoginUiState.Idle)
 
-        assertFits(411.dp, 923.dp)
+        assertFits()
     }
 
     @Test
     fun phoneLandscape_fitsTheScreen() {
         setContent(923.dp, 411.dp, LoginUiState.Idle)
 
-        assertFits(923.dp, 411.dp)
+        assertFits()
     }
 
     @Test
     fun smallPhoneLandscape_fitsTheScreen() {
         setContent(640.dp, 360.dp, LoginUiState.Idle)
 
-        assertFits(640.dp, 360.dp)
+        assertFits()
     }
 }
+
+private const val SCREEN_TAG = "login-screen"

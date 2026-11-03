@@ -6,7 +6,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import dev.myrlennia237.amlethmp.core.ui.device.P10Preview
 import dev.myrlennia237.amlethmp.core.ui.device.P10ProPreview
 import dev.myrlennia237.amlethmp.core.ui.theme.AMPTheme
-import dev.myrlennia237.amlethmp.screen.login.data.SignInMethod
+import dev.myrlennia237.amlethmp.screen.login.data.model.SignInMethod
 
 @P10Preview
 @P10ProPreview

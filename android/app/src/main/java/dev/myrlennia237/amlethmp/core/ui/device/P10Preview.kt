@@ -2,10 +2,6 @@ package dev.myrlennia237.amlethmp.core.ui.device
 
 import androidx.compose.ui.tooling.preview.Preview
 
-/**
- * Google Pixel 10 (1080x2424 px, 420 dpi) in portrait and landscape.
- * Values come from Android Studio's `pixel_10` device definition.
- */
 @Preview(
     name = "Pixel 10 - Portrait",
     group = "Pixel 10",

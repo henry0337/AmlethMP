@@ -17,7 +17,7 @@ import dev.myrlennia237.amlethmp.core.ui.component.AMPToastHost
 import dev.myrlennia237.amlethmp.core.ui.component.AMPToastState
 import dev.myrlennia237.amlethmp.core.ui.component.LocalToastState
 import dev.myrlennia237.amlethmp.core.ui.theme.AMPTheme
-import dev.myrlennia237.amlethmp.screen.login.data.SignInMethod
+import dev.myrlennia237.amlethmp.screen.login.data.model.SignInMethod
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

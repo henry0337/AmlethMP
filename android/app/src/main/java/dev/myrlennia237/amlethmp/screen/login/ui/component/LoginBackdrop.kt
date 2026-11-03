@@ -18,7 +18,6 @@ import dev.myrlennia237.amlethmp.R
 
 private const val FOCAL_BIAS = -0.1f
 
-/** Full-screen grayscale photo dimmed by a vertical scrim so the content on top stays legible. */
 @Composable
 internal fun LoginBackdrop(modifier: Modifier = Modifier) {
     val grayscale = remember { ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }) }

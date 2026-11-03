@@ -22,14 +22,14 @@ class EncryptedSessionSerializerTest {
     }
 
     @Test
-    fun roundTrip_returnsTheSameSession() = runTest {
+    fun `round trip returns the same session`() = runTest {
         val bytes = encrypt(testSession)
 
         assertEquals(testSession, serializer.readFrom(ByteArrayInputStream(bytes)))
     }
 
     @Test
-    fun written_bytesDoNotContainThePlainTokens() = runTest {
+    fun `written bytes do not contain the plain tokens`() = runTest {
         val text = String(encrypt(testSession), Charsets.ISO_8859_1)
 
         assertFalse(text.contains(testSession.accessToken))
@@ -37,7 +37,7 @@ class EncryptedSessionSerializerTest {
     }
 
     @Test
-    fun writingNull_producesAnEmptyFileThatReadsAsNoSession() = runTest {
+    fun `writing null produces an empty file that reads as no session`() = runTest {
         val bytes = encrypt(null)
 
         assertEquals(0, bytes.size)
@@ -45,7 +45,7 @@ class EncryptedSessionSerializerTest {
     }
 
     @Test
-    fun tamperedBytes_areReportedAsCorruption() = runTest {
+    fun `tampered bytes are reported as corruption`() = runTest {
         val bytes = encrypt(testSession)
         bytes[bytes.lastIndex] = (bytes.last().toInt() xor 0x01).toByte()
 
@@ -55,7 +55,7 @@ class EncryptedSessionSerializerTest {
     }
 
     @Test
-    fun bytesEncryptedWithAnotherKey_areReportedAsCorruption() = runTest {
+    fun `bytes encrypted with another key are reported as corruption`() = runTest {
         val bytes = encrypt(testSession)
         val otherKeySerializer = EncryptedSessionSerializer { newTestAead() }
 
@@ -65,7 +65,7 @@ class EncryptedSessionSerializerTest {
     }
 
     @Test
-    fun toString_doesNotRevealTokens() {
+    fun `toString does not reveal the tokens`() {
         val text = testSession.toString()
 
         assertFalse(text.contains(testSession.accessToken))

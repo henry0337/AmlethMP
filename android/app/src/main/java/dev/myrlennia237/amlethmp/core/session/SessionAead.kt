@@ -7,7 +7,6 @@ import com.google.crypto.tink.RegistryConfiguration
 import com.google.crypto.tink.aead.AeadConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
 
-/** Builds the AES-256-GCM primitive whose keyset is wrapped by a key in the Android Keystore. */
 internal object SessionAead {
     const val KEYSET_PREFS_NAME = "session_keyset_prefs"
 

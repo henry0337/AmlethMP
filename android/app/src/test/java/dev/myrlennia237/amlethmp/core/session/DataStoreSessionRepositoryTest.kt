@@ -38,14 +38,14 @@ class DataStoreSessionRepositoryTest {
     }
 
     @Test
-    fun restore_withoutSavedSession_returnsNull() = runTest {
+    fun `restore without a saved session returns null`() = runTest {
         val (repository, _) = newRepository()
 
         assertNull(repository.restore())
     }
 
     @Test
-    fun save_thenRestore_returnsTheSession() = runTest {
+    fun `save then restore returns the session`() = runTest {
         val (repository, _) = newRepository()
 
         repository.save(testSession)
@@ -54,7 +54,7 @@ class DataStoreSessionRepositoryTest {
     }
 
     @Test
-    fun savedSession_survivesARestart() = runTest {
+    fun `a saved session survives a restart`() = runTest {
         val (first, firstJob) = newRepository()
         first.save(testSession)
         firstJob.cancelAndJoin()
@@ -65,7 +65,7 @@ class DataStoreSessionRepositoryTest {
     }
 
     @Test
-    fun clear_removesTheSession() = runTest {
+    fun `clear removes the session`() = runTest {
         val (repository, _) = newRepository()
         repository.save(testSession)
 
@@ -75,7 +75,7 @@ class DataStoreSessionRepositoryTest {
     }
 
     @Test
-    fun corruptedFile_isTreatedAsNoSessionAndCanBeOverwritten() = runTest {
+    fun `a corrupted file is treated as no session and can be overwritten`() = runTest {
         File(tempFolder.root, SESSION_FILE_NAME).writeBytes(byteArrayOf(1, 2, 3, 4, 5))
         val (repository, _) = newRepository()
 
@@ -86,7 +86,7 @@ class DataStoreSessionRepositoryTest {
     }
 
     @Test
-    fun unreadableKey_isTreatedAsNoSession() = runTest {
+    fun `an unreadable key is treated as no session`() = runTest {
         val (first, firstJob) = newRepository()
         first.save(testSession)
         firstJob.cancelAndJoin()

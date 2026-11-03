@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import dev.myrlennia237.amlethmp.R
 import dev.myrlennia237.amlethmp.core.ui.theme.Spacing
 
-/** Decorative "or" separator; hidden from accessibility services. */
 @Composable
 internal fun LoginDivider(modifier: Modifier = Modifier) {
     val lineColor = MaterialTheme.colorScheme.outlineVariant

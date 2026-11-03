@@ -13,7 +13,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import dev.myrlennia237.amlethmp.R
 
-/** Terms and privacy notice; the two links are only styled for now because no URLs are defined yet. */
 @Composable
 internal fun LoginLegal(
     textAlign: TextAlign,

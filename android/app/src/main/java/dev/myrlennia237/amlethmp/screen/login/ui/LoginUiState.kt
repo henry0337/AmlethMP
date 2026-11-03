@@ -1,6 +1,6 @@
 package dev.myrlennia237.amlethmp.screen.login.ui
 
-import dev.myrlennia237.amlethmp.screen.login.data.SignInMethod
+import dev.myrlennia237.amlethmp.screen.login.data.model.SignInMethod
 
 sealed interface LoginUiState {
     data object Idle : LoginUiState

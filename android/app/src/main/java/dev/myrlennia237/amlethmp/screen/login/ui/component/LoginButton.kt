@@ -25,10 +25,6 @@ import dev.myrlennia237.amlethmp.core.ui.theme.Spacing
 
 private const val DIMMED_ALPHA = 0.55f
 
-/**
- * Pill-shaped sign-in button. While [isLoading] it shows a spinner and [loadingText];
- * when [isDimmed] it stays visible but faded, as another button is signing in.
- */
 @Composable
 internal fun LoginButton(
     text: String,

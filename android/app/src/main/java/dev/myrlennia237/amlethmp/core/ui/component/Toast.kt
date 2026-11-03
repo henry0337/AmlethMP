@@ -142,11 +142,6 @@ fun AMPToast(
     }
 }
 
-/**
- * Shows the toast of [state] at the top of the screen, below the status bar, and hides it after its
- * duration. The countdown pauses while the toast is touched or hovered and continues with the time
- * left. Place it once at the root, above the content.
- */
 @Composable
 fun AMPToastHost(
     state: AMPToastState,

@@ -22,10 +22,9 @@ import dev.myrlennia237.amlethmp.core.ui.theme.Discord
 import dev.myrlennia237.amlethmp.core.ui.theme.Light
 import dev.myrlennia237.amlethmp.core.ui.theme.OnLight
 import dev.myrlennia237.amlethmp.core.ui.theme.Spacing
-import dev.myrlennia237.amlethmp.screen.login.data.SignInMethod
+import dev.myrlennia237.amlethmp.screen.login.data.model.SignInMethod
 import dev.myrlennia237.amlethmp.screen.login.ui.LoginUiState
 
-/** The Google and Discord buttons, the "or" divider and the guest button. */
 @Composable
 internal fun LoginActions(
     uiState: LoginUiState,
@@ -99,7 +98,6 @@ internal fun LoginActions(
     }
 }
 
-/** Note shown under the guest button: nothing is stored until the user signs in. */
 @Composable
 internal fun LoginGuestHint(modifier: Modifier = Modifier) {
     Text(

@@ -19,9 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -31,11 +33,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavKey
+import dev.myrlennia237.amlethmp.BuildConfig
 import dev.myrlennia237.amlethmp.R
 import dev.myrlennia237.amlethmp.core.ui.component.AMPScrollColumn
 import dev.myrlennia237.amlethmp.core.ui.component.LocalToastState
 import dev.myrlennia237.amlethmp.core.ui.theme.Spacing
-import dev.myrlennia237.amlethmp.screen.login.data.SignInMethod
+import dev.myrlennia237.amlethmp.screen.login.data.model.SignInMethod
+import dev.myrlennia237.amlethmp.screen.login.data.google.CredentialManagerGoogleIdTokenSource
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginActions
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginBackdrop
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginGuestHint
@@ -51,6 +55,10 @@ fun LoginRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val currentOnSignedIn by rememberUpdatedState(onSignedIn)
+    val context = LocalContext.current
+    val googleIdTokenSource = remember(context) {
+        CredentialManagerGoogleIdTokenSource(context, BuildConfig.GOOGLE_WEB_CLIENT_ID)
+    }
 
     LaunchedEffect(uiState) {
         if (uiState is LoginUiState.SignedIn) currentOnSignedIn()
@@ -58,7 +66,7 @@ fun LoginRoute(
 
     LoginScreen(
         uiState = uiState,
-        onSignIn = viewModel::onSignIn,
+        onSignIn = { method -> viewModel.onSignIn(method, googleIdTokenSource) },
         modifier = modifier
     )
 }
@@ -202,14 +210,9 @@ private fun ScaledDown(scale: Float, content: @Composable () -> Unit) {
     )
 }
 
-/** Which layout the design prescribes for the available size. */
 internal enum class LoginLayout {
     Portrait,
-
-    /** Portrait on a low screen such as 360x640 dp: same layout, whole UI scaled down. */
     SmallPortrait,
-
-    /** Very short landscape screen: intro on the left, actions on the right. */
     Landscape
 }
 

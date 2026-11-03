@@ -8,6 +8,5 @@ data class Session(
     val refreshToken: String,
     val expiresAtMillis: Long
 ) {
-    /** Keeps the tokens out of logs and crash reports. */
     override fun toString(): String = "Session(expiresAtMillis=$expiresAtMillis)"
 }

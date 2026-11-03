@@ -9,10 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import java.io.File
 
-/** File name under `files/datastore/`; keep in sync with the backup exclusions in `res/xml`. */
 internal const val SESSION_FILE_NAME = "session.enc"
 
-/** A session file that cannot be read (corrupted, or its key is gone) is replaced by "no session". */
 internal fun createSessionDataStore(
     aead: () -> Aead,
     produceFile: () -> File,
