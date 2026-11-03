@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
@@ -18,8 +19,8 @@ import dev.myrlennia237.amlethmp.screen.login.ui.LoginKey
 import dev.myrlennia237.amlethmp.screen.login.ui.LoginRoute
 
 @Composable
-fun Navigator(modifier: Modifier = Modifier) {
-    val backStack = rememberNavBackStack(LoginKey)
+fun Navigator(startKey: NavKey, modifier: Modifier = Modifier) {
+    val backStack = rememberNavBackStack(startKey)
     val toastState = rememberToastState()
 
     CompositionLocalProvider(LocalToastState provides toastState) {
