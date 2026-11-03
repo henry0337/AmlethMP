@@ -10,6 +10,7 @@ from app.core.config import get_settings
 from app.db.base import Base
 
 # Import each model package here as models are added, so Alembic can discover it.
+import app.models  # noqa: F401
 
 config = context.config
 

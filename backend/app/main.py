@@ -4,6 +4,7 @@ from fastapi import FastAPI, HTTPException, status
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
+from app.api.routes import auth
 from app.core.config import get_settings
 from app.db.session import engine, shutdown_database
 
@@ -17,6 +18,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
+app.include_router(auth.router)
 
 
 @app.get("/health")

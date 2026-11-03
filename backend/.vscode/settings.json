@@ -1,4 +1,7 @@
 {
-    "python-envs.defaultEnvManager": "ms-python.python:venv",
-    "python.terminal.useEnvFile": true
+  "python-envs.defaultEnvManager": "ms-python.python:venv",
+  "python.terminal.useEnvFile": true,
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.languageServerMode": "full",
+  "python.analysis.typeCheckingMode": "strict"
 }
