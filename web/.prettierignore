@@ -1,0 +1,20 @@
+# Dependencies, generated output and caches
+node_modules/
+.next/
+out/
+build/
+coverage/
+.vercel/
+next-env.d.ts
+*.tsbuildinfo
+pnpm-lock.yaml
+
+# Environment files and environment-managed directories
+.env*
+.agents/
+.aws/
+.claude/
+.codex/
+
+# Static assets are maintained independently of source formatting
+public/
