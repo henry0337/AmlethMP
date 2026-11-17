@@ -22,3 +22,15 @@ uv run alembic upgrade head
 Do not call `Base.metadata.create_all()` in the application; keeping schema
 changes in migrations makes local, staging, and production environments
 reproducible.
+
+## Google sign-in (local development)
+
+Create a Google OAuth client of type **Web application**, then add
+`http://localhost:8000/auth/google/callback` as its authorized redirect URI.
+Set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and a random
+`AUTH_SESSION_SECRET` in `.env`. The API stores only an opaque, signed,
+HttpOnly browser session; the Google client secret never belongs in the web app.
+
+For production, use HTTPS for the API callback and web origin, set
+`AUTH_SESSION_COOKIE_SECURE=true`, and register the exact production callback
+URL with Google.
