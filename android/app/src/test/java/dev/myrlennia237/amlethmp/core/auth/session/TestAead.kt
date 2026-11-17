@@ -1,4 +1,4 @@
-package dev.myrlennia237.amlethmp.core.session
+package dev.myrlennia237.amlethmp.core.auth.session
 
 import com.google.crypto.tink.Aead
 import com.google.crypto.tink.KeysetHandle

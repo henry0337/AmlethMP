@@ -20,13 +20,13 @@ import dev.myrlennia237.amlethmp.core.ui.component.AMPToastHost
 import dev.myrlennia237.amlethmp.core.ui.component.AMPToastState
 import dev.myrlennia237.amlethmp.core.ui.component.LocalToastState
 import dev.myrlennia237.amlethmp.core.ui.theme.AMPTheme
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
 class LoginRouteTest {

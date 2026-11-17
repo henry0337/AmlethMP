@@ -62,9 +62,15 @@ class LoginScreenLayoutTest {
         )
         texts.forEach { text ->
             val bounds = composeRule.onNodeWithText(text).pixelBounds()
-            assertTrue("\"$text\" is outside the screen: $bounds in $screen", screen.contains(bounds))
+            assertTrue(
+                "\"$text\" is outside the screen: $bounds in $screen",
+                screen.contains(bounds)
+            )
         }
-        val legal = composeRule.onNodeWithText(text(R.string.login_legal_terms), substring = true).pixelBounds()
+        val legal = composeRule.onNodeWithText(
+            text(R.string.login_legal_terms),
+            substring = true
+        ).pixelBounds()
         assertTrue("legal notice is outside the screen: $legal in $screen", screen.contains(legal))
     }
 

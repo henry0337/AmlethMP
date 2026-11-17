@@ -3,6 +3,7 @@ package dev.myrlennia237.amlethmp.screen.login.ui
 import dev.myrlennia237.amlethmp.core.auth.AuthException
 import dev.myrlennia237.amlethmp.core.auth.AuthRepository
 import dev.myrlennia237.amlethmp.core.network.NetworkMonitor
+import java.io.IOException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,7 +18,6 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest {
@@ -108,7 +108,10 @@ class LoginViewModelTest {
         runCurrent()
 
         assertEquals(
-            LoginUiState(status = LoginStatus.Idle, userMessage = LoginUserMessage.SignInFailed),
+            LoginUiState(
+                status = LoginStatus.Idle,
+                userMessage = LoginUserMessage.SignInFailed
+            ),
             viewModel.uiState.value
         )
     }
@@ -135,7 +138,10 @@ class LoginViewModelTest {
         runCurrent()
 
         assertEquals(
-            LoginUiState(status = LoginStatus.Idle, userMessage = LoginUserMessage.NetworkUnavailable),
+            LoginUiState(
+                status = LoginStatus.Idle,
+                userMessage = LoginUserMessage.NetworkUnavailable
+            ),
             viewModel.uiState.value
         )
         assertEquals(false, viewModel.uiState.value.isAwaitingGoogleIdToken)
@@ -151,7 +157,10 @@ class LoginViewModelTest {
         runCurrent()
 
         assertEquals(
-            LoginUiState(status = LoginStatus.Idle, userMessage = LoginUserMessage.NetworkUnavailable),
+            LoginUiState(
+                status = LoginStatus.Idle,
+                userMessage = LoginUserMessage.NetworkUnavailable
+            ),
             viewModel.uiState.value
         )
         assertEquals(emptyList<String>(), repository.calls)
@@ -208,7 +217,10 @@ class LoginViewModelTest {
         runCurrent()
 
         assertEquals(
-            LoginUiState(status = LoginStatus.Idle, userMessage = LoginUserMessage.SignInFailed),
+            LoginUiState(
+                status = LoginStatus.Idle,
+                userMessage = LoginUserMessage.SignInFailed
+            ),
             viewModel.uiState.value
         )
         assertEquals(emptyList<String>(), repository.calls)

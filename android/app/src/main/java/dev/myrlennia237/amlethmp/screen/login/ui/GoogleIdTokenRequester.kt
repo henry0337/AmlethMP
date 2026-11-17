@@ -17,10 +17,7 @@ import dev.myrlennia237.amlethmp.BuildConfig
 
 // Credential Manager needs an Activity context and shows its own sheet, so this is UI logic: the
 // screen asks for the token here and hands only the resulting value to the ViewModel.
-internal class GoogleIdTokenRequester(
-    private val context: Context,
-    private val serverClientId: String
-) {
+internal class GoogleIdTokenRequester(private val context: Context, private val serverClientId: String) {
 
     suspend fun request(): Result<String> {
         if (serverClientId.isBlank()) {
@@ -33,7 +30,9 @@ internal class GoogleIdTokenRequester(
 
         return try {
             val credential = CredentialManager.create(context).getCredential(context, request).credential
-            if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            if (credential is CustomCredential &&
+                credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+            ) {
                 Result.success(GoogleIdTokenCredential.createFrom(credential.data).idToken)
             } else {
                 Result.failure(IllegalStateException("Unexpected credential type"))

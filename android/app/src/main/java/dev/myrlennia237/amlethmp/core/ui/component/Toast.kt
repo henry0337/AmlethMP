@@ -67,9 +67,9 @@ import dev.myrlennia237.amlethmp.core.ui.theme.Info as InfoColor
 import dev.myrlennia237.amlethmp.core.ui.theme.Spacing
 import dev.myrlennia237.amlethmp.core.ui.theme.Success as SuccessColor
 import dev.myrlennia237.amlethmp.core.ui.theme.Warning as WarningColor
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * **[[Shared UI Component]]**
@@ -80,12 +80,7 @@ import kotlin.time.Duration.Companion.milliseconds
  * @author Myrlennia
  */
 @Composable
-fun AMPToast(
-    message: String,
-    onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
-    type: ToastType = ToastType.Error
-) {
+fun AMPToast(message: String, onDismiss: () -> Unit, modifier: Modifier = Modifier, type: ToastType = ToastType.Error) {
     val shape = MaterialTheme.shapes.medium
 
     Row(
@@ -143,10 +138,7 @@ fun AMPToast(
 }
 
 @Composable
-fun AMPToastHost(
-    state: AMPToastState,
-    modifier: Modifier = Modifier
-) {
+fun AMPToastHost(state: AMPToastState, modifier: Modifier = Modifier) {
     val toast = state.current
     // Kept after the toast is dismissed so that its exit animation still has something to draw.
     var shown by remember { mutableStateOf(toast) }
@@ -180,7 +172,9 @@ fun AMPToastHost(
             modifier = Modifier
                 .fillMaxWidth()
                 .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                    )
                 )
                 .padding(
                     start = Spacing.Space5,
@@ -191,11 +185,21 @@ fun AMPToastHost(
             AnimatedVisibility(
                 visible = toast != null,
                 enter = fadeIn(tween(TOAST_ENTER_MILLIS, easing = ToastEnterEasing)) +
-                    slideInVertically(tween(TOAST_ENTER_MILLIS, easing = ToastEnterEasing)) { -enterOffset } +
-                    scaleIn(tween(TOAST_ENTER_MILLIS, easing = ToastEnterEasing), initialScale = TOAST_SCALE),
+                    slideInVertically(tween(TOAST_ENTER_MILLIS, easing = ToastEnterEasing)) {
+                        -enterOffset
+                    } +
+                    scaleIn(
+                        tween(TOAST_ENTER_MILLIS, easing = ToastEnterEasing),
+                        initialScale = TOAST_SCALE
+                    ),
                 exit = fadeOut(tween(TOAST_EXIT_MILLIS, easing = ToastExitEasing)) +
-                    slideOutVertically(tween(TOAST_EXIT_MILLIS, easing = ToastExitEasing)) { -exitOffset } +
-                    scaleOut(tween(TOAST_EXIT_MILLIS, easing = ToastExitEasing), targetScale = TOAST_SCALE)
+                    slideOutVertically(tween(TOAST_EXIT_MILLIS, easing = ToastExitEasing)) {
+                        -exitOffset
+                    } +
+                    scaleOut(
+                        tween(TOAST_EXIT_MILLIS, easing = ToastExitEasing),
+                        targetScale = TOAST_SCALE
+                    )
             ) {
                 shown?.let { data ->
                     AMPToast(
@@ -217,11 +221,7 @@ class AMPToastState {
 
     private var nextId = 0L
 
-    fun show(
-        message: String,
-        type: ToastType = ToastType.Error,
-        durationMillis: Long = DEFAULT_TOAST_DURATION_MILLIS
-    ) {
+    fun show(message: String, type: ToastType = ToastType.Error, durationMillis: Long = DEFAULT_TOAST_DURATION_MILLIS) {
         current = ToastData(nextId++, message, type, durationMillis)
     }
 
@@ -243,12 +243,7 @@ enum class ToastType(val color: Color, @DrawableRes val icon: Int) {
 }
 
 @Immutable
-data class ToastData(
-    val id: Long,
-    val message: String,
-    val type: ToastType,
-    val durationMillis: Long
-)
+data class ToastData(val id: Long, val message: String, val type: ToastType, val durationMillis: Long)
 
 const val DEFAULT_TOAST_DURATION_MILLIS = 5_000L
 

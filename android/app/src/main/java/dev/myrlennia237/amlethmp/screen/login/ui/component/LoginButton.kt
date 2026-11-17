@@ -58,7 +58,10 @@ internal fun LoginButton(
             .alpha(if (isDimmed) DIMMED_ALPHA else 1f)
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(Spacing.Space3, Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.spacedBy(
+                Spacing.Space3,
+                Alignment.CenterHorizontally
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (isLoading) {

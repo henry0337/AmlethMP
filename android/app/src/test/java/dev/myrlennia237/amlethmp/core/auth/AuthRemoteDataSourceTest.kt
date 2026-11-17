@@ -15,7 +15,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class RetrofitAuthRemoteDataSourceTest {
+class AuthRemoteDataSourceTest {
 
     private val server = MockWebServer()
     private val json = NetworkModule.provideJson()
@@ -37,7 +37,11 @@ class RetrofitAuthRemoteDataSourceTest {
         val result = dataSource().signInWithGoogle("google-id-token")
 
         assertEquals(
-            TokenResponse(accessToken = "access-jwt", refreshToken = "refresh-token", expiresInSeconds = 900),
+            TokenResponse(
+                accessToken = "access-jwt",
+                refreshToken = "refresh-token",
+                expiresInSeconds = 900
+            ),
             result.getOrThrow()
         )
         val request = server.takeRequest()
@@ -65,7 +69,11 @@ class RetrofitAuthRemoteDataSourceTest {
 
     @Test
     fun `google rejection fails as rejected and keeps only the status code`() = runTest {
-        server.enqueue(MockResponse.Builder().code(401).body("""{"detail":"Invalid Google ID token."}""").build())
+        server.enqueue(
+            MockResponse.Builder().code(
+                401
+            ).body("""{"detail":"Invalid Google ID token."}""").build()
+        )
 
         val failure = dataSource().signInWithGoogle("google-id-token").exceptionOrNull()
 
@@ -126,7 +134,7 @@ class RetrofitAuthRemoteDataSourceTest {
         assertEquals(0, server.requestCount)
     }
 
-    private fun dataSource(baseUrl: HttpUrl = server.url("")) = RetrofitAuthRemoteDataSource(
+    private fun dataSource(baseUrl: HttpUrl = server.url("")) = AuthRemoteDataSource(
         authApi = createRetrofit(baseUrl, OkHttpClient(), json).create(AuthApi::class.java),
         deviceName = "Pixel 9"
     )

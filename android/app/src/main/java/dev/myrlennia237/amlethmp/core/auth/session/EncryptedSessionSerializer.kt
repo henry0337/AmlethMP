@@ -1,21 +1,19 @@
-package dev.myrlennia237.amlethmp.core.session
+package dev.myrlennia237.amlethmp.core.auth.session
 
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.crypto.tink.Aead
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.Json
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.security.GeneralSecurityException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 
-class EncryptedSessionSerializer(
-    private val aead: () -> Aead,
-    private val ioDispatcher: CoroutineDispatcher
-) : Serializer<Session?> {
+class EncryptedSessionSerializer(private val aead: () -> Aead, private val ioDispatcher: CoroutineDispatcher) :
+    Serializer<Session?> {
 
     override val defaultValue: Session? = null
 

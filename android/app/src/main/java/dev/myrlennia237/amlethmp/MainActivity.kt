@@ -43,10 +43,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MainRoute(
-    modifier: Modifier = Modifier,
-    viewModel: MainViewModel = hiltViewModel()
-) {
+private fun MainRoute(modifier: Modifier = Modifier, viewModel: MainViewModel = hiltViewModel()) {
     val startDestination by viewModel.startDestination.collectAsStateWithLifecycle()
 
     // Nothing to draw while the stored session is read; the Surface behind already paints the background.

@@ -26,10 +26,7 @@ class LoginScreenTest {
     /** Texts are read from resources so the tests pass in whichever language the device uses. */
     private fun text(@StringRes id: Int) = context.getString(id)
 
-    private fun setContent(
-        uiState: LoginUiState,
-        onSignInClick: (SignInMethod) -> Unit = {}
-    ) {
+    private fun setContent(uiState: LoginUiState, onSignInClick: (SignInMethod) -> Unit = {}) {
         composeRule.setContent {
             AMPTheme {
                 LoginScreen(uiState = uiState, onSignInClick = onSignInClick)

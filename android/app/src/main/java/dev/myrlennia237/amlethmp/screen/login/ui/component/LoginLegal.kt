@@ -14,10 +14,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import dev.myrlennia237.amlethmp.R
 
 @Composable
-internal fun LoginLegal(
-    textAlign: TextAlign,
-    modifier: Modifier = Modifier
-) {
+internal fun LoginLegal(textAlign: TextAlign, modifier: Modifier = Modifier) {
     val terms = stringResource(R.string.login_legal_terms)
     val privacy = stringResource(R.string.login_legal_privacy)
     val text = stringResource(R.string.login_legal, terms, privacy)

@@ -1,4 +1,4 @@
-package dev.myrlennia237.amlethmp.core.session
+package dev.myrlennia237.amlethmp.core.auth.session
 
 import android.content.Context
 import androidx.datastore.dataStoreFile
@@ -9,10 +9,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.myrlennia237.amlethmp.core.module.ApplicationScope
 import dev.myrlennia237.amlethmp.core.module.IoDispatcher
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.plus
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

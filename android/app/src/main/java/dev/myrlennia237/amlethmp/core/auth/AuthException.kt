@@ -11,7 +11,8 @@ sealed class AuthException(message: String, cause: Throwable? = null) : Exceptio
 
     class Server(val statusCode: Int) : AuthException("The auth server failed with HTTP $statusCode")
 
-    class InvalidResponse(cause: Throwable) : AuthException("The auth server sent an unreadable response", cause)
+    class InvalidResponse(cause: Throwable) :
+        AuthException("The auth server sent an unreadable response", cause)
 
     class Storage(cause: IOException) : AuthException("The session could not be stored", cause)
 

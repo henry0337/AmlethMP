@@ -10,9 +10,7 @@ import dev.myrlennia237.amlethmp.core.ui.theme.AMPTheme
 @P10Preview
 @P10ProPreview
 @Composable
-private fun LoginScreenPreview(
-    @PreviewParameter(LoginUiStateProvider::class) uiState: LoginUiState
-) {
+private fun LoginScreenPreview(@PreviewParameter(LoginUiStateProvider::class) uiState: LoginUiState) {
     AMPTheme {
         LoginScreen(uiState = uiState, onSignInClick = {})
     }

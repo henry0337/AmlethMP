@@ -1,14 +1,12 @@
-package dev.myrlennia237.amlethmp.core.session
+package dev.myrlennia237.amlethmp.core.auth.session
 
 import androidx.datastore.core.DataStore
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import timber.log.Timber
-import java.io.IOException
 
-class DataStoreSessionRepository(
-    private val dataStore: DataStore<Session?>
-) : SessionRepository {
+class DataStoreSessionRepository(private val dataStore: DataStore<Session?>) : SessionRepository {
 
     // An unreadable file means the user has to sign in again, which is better than failing the app.
     override val session: Flow<Session?> = dataStore.data.catch { e ->

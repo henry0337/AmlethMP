@@ -1,3 +1,6 @@
+// The NavKey lives next to its screen (see CODING_STANDARDS.md), so the file is named after the screen.
+@file:Suppress("MatchingDeclarationName")
+
 package dev.myrlennia237.amlethmp.screen.home.ui
 
 import androidx.compose.foundation.layout.Box

@@ -20,7 +20,8 @@ private const val FOCAL_BIAS = -0.1f
 
 @Composable
 internal fun LoginBackdrop(modifier: Modifier = Modifier) {
-    val grayscale = remember { ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }) }
+    val grayscale =
+        remember { ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }) }
     val background = MaterialTheme.colorScheme.background
     val scrim = Brush.verticalGradient(
         0f to background.copy(alpha = 0.6f),

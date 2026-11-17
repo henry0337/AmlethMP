@@ -1,10 +1,16 @@
 package dev.myrlennia237.amlethmp.core.module
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dev.myrlennia237.amlethmp.BuildConfig
+import dev.myrlennia237.amlethmp.core.network.ConnectivityManagerNetworkMonitor
+import dev.myrlennia237.amlethmp.core.network.NetworkMonitor
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -12,8 +18,6 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -43,15 +47,19 @@ object NetworkModule {
     fun provideRetrofit(client: OkHttpClient, json: Json): Retrofit =
         createRetrofit(BuildConfig.API_BASE_URL.toHttpUrl(), client, json)
 
+    @Provides
+    @Singleton
+    fun provideNetworkMonitor(@ApplicationContext context: Context): NetworkMonitor =
+        ConnectivityManagerNetworkMonitor(context)
+
     private const val TIMEOUT_SECONDS = 15L
 }
 
-internal fun createRetrofit(baseUrl: HttpUrl, client: OkHttpClient, json: Json): Retrofit =
-    Retrofit.Builder()
-        .baseUrl(baseUrl.withTrailingSlash())
-        .client(client)
-        .addConverterFactory(json.asConverterFactory(JSON_MEDIA_TYPE))
-        .build()
+internal fun createRetrofit(baseUrl: HttpUrl, client: OkHttpClient, json: Json): Retrofit = Retrofit.Builder()
+    .baseUrl(baseUrl.withTrailingSlash())
+    .client(client)
+    .addConverterFactory(json.asConverterFactory(JSON_MEDIA_TYPE))
+    .build()
 
 // Retrofit resolves endpoint paths against the base URL and rejects one that does not end with "/".
 private fun HttpUrl.withTrailingSlash(): HttpUrl =

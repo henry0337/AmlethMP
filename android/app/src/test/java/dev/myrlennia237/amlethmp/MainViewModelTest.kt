@@ -1,7 +1,7 @@
 package dev.myrlennia237.amlethmp
 
-import dev.myrlennia237.amlethmp.core.session.Session
-import dev.myrlennia237.amlethmp.core.session.SessionRepository
+import dev.myrlennia237.amlethmp.core.auth.session.Session
+import dev.myrlennia237.amlethmp.core.auth.session.SessionRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +23,8 @@ import org.junit.Test
 class MainViewModelTest {
 
     private val sessions = FakeSessionRepository()
-    private val session = Session(accessToken = "access", refreshToken = "refresh", expiresAtMillis = 1_000L)
+    private val session =
+        Session(accessToken = "access", refreshToken = "refresh", expiresAtMillis = 1_000L)
 
     @Before
     fun setUp() {

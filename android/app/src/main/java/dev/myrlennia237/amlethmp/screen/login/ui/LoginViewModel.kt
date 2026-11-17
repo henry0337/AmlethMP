@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.myrlennia237.amlethmp.core.auth.AuthException
 import dev.myrlennia237.amlethmp.core.auth.AuthRepository
 import dev.myrlennia237.amlethmp.core.network.NetworkMonitor
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -40,7 +40,9 @@ class LoginViewModel @Inject constructor(
                 SignInMethod.Google -> _uiState.update {
                     it.copy(status = LoginStatus.SigningIn(method, awaitingGoogleIdToken = true))
                 }
+
                 SignInMethod.Discord -> request(method) { authRepository.signInWithDiscord() }
+
                 SignInMethod.Guest -> request(method) { authRepository.signInAsGuest() }
             }
         }
@@ -91,5 +93,7 @@ class LoginViewModel @Inject constructor(
 private val SignInMethod.needsNetwork: Boolean
     get() = this != SignInMethod.Guest
 
-private fun Throwable.toUserMessage(): LoginUserMessage =
-    if (this is AuthException.Network) LoginUserMessage.NetworkUnavailable else LoginUserMessage.SignInFailed
+private fun Throwable.toUserMessage(): LoginUserMessage = when (this) {
+    is AuthException.Network -> LoginUserMessage.NetworkUnavailable
+    else -> LoginUserMessage.SignInFailed
+}

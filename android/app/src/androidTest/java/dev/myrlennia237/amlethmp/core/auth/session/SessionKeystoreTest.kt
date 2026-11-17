@@ -1,7 +1,8 @@
-package dev.myrlennia237.amlethmp.core.session
+package dev.myrlennia237.amlethmp.core.auth.session
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,9 +16,9 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.File
 
-/** Exercises the real Android Keystore + Tink path that JVM unit tests cannot reach. */
+// Exercises what JVM unit tests cannot rely on: the real Android Keystore + Tink path, and DataStore
+// replacing an existing file, which fails on Windows with JDK 21.
 @RunWith(AndroidJUnit4::class)
 class SessionKeystoreTest {
 
@@ -89,6 +90,19 @@ class SessionKeystoreTest {
         repository.clear()
 
         assertNull(repository.session.first())
+        job.cancelAndJoin()
+    }
+
+    @Test
+    fun corruptedFile_isTreatedAsNoSessionAndCanBeOverwritten() = runBlocking {
+        file.writeBytes(byteArrayOf(1, 2, 3, 4, 5))
+        val job = Job()
+        val repository = newRepository(job)
+
+        assertNull(repository.session.first())
+
+        repository.save(session)
+        assertEquals(session, repository.session.first())
         job.cancelAndJoin()
     }
 }

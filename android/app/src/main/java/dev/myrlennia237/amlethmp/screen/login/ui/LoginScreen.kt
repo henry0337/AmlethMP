@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation3.runtime.NavKey
 import dev.myrlennia237.amlethmp.R
 import dev.myrlennia237.amlethmp.core.ui.component.AMPScrollColumn
 import dev.myrlennia237.amlethmp.core.ui.component.LocalToastState
@@ -40,13 +41,10 @@ import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginBackdrop
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginGuestHint
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginIntro
 import dev.myrlennia237.amlethmp.screen.login.ui.component.LoginLegal
+import kotlinx.serialization.Serializable
 
 @Composable
-fun LoginRoute(
-    onSignedIn: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = hiltViewModel()
-) {
+fun LoginRoute(onSignedIn: () -> Unit, modifier: Modifier = Modifier, viewModel: LoginViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val currentOnSignedIn by rememberUpdatedState(onSignedIn)
     val googleIdTokenRequester = rememberGoogleIdTokenRequester()
@@ -63,8 +61,11 @@ fun LoginRoute(
         googleIdTokenRequester.request().fold(
             onSuccess = viewModel::googleIdTokenReceived,
             onFailure = { cause ->
-                if (cause is GoogleSignInCancelledException) viewModel.googleSignInCancelled()
-                else viewModel.googleSignInFailed(cause)
+                if (cause is GoogleSignInCancelledException) {
+                    viewModel.googleSignInCancelled()
+                } else {
+                    viewModel.googleSignInFailed(cause)
+                }
             }
         )
     }
@@ -85,11 +86,7 @@ fun LoginRoute(
 }
 
 @Composable
-fun LoginScreen(
-    uiState: LoginUiState,
-    onSignInClick: (SignInMethod) -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun LoginScreen(uiState: LoginUiState, onSignInClick: (SignInMethod) -> Unit, modifier: Modifier = Modifier) {
     BoxWithConstraints(
         modifier = modifier
             .fillMaxSize()
@@ -102,7 +99,11 @@ fun LoginScreen(
         Box(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) {
             when (layout) {
                 LoginLayout.Portrait -> LoginPortrait(uiState, onSignInClick)
-                LoginLayout.SmallPortrait -> ScaledDown(SMALL_PHONE_SCALE) { LoginPortrait(uiState, onSignInClick) }
+
+                LoginLayout.SmallPortrait -> ScaledDown(SMALL_PHONE_SCALE) {
+                    LoginPortrait(uiState, onSignInClick)
+                }
+
                 LoginLayout.Landscape -> LoginLandscape(uiState, onSignInClick)
             }
         }
@@ -110,10 +111,7 @@ fun LoginScreen(
 }
 
 @Composable
-private fun LoginPortrait(
-    uiState: LoginUiState,
-    onSignInClick: (SignInMethod) -> Unit
-) {
+private fun LoginPortrait(uiState: LoginUiState, onSignInClick: (SignInMethod) -> Unit) {
     AMPScrollColumn(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -152,10 +150,7 @@ private fun LoginPortrait(
 }
 
 @Composable
-private fun LoginLandscape(
-    uiState: LoginUiState,
-    onSignInClick: (SignInMethod) -> Unit
-) {
+private fun LoginLandscape(uiState: LoginUiState, onSignInClick: (SignInMethod) -> Unit) {
     AMPScrollColumn(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
@@ -216,6 +211,9 @@ private fun ScaledDown(scale: Float, content: @Composable () -> Unit) {
     )
 }
 
+@Serializable
+data object LoginKey : NavKey
+
 internal enum class LoginLayout {
     Portrait,
     SmallPortrait,
@@ -223,8 +221,12 @@ internal enum class LoginLayout {
 }
 
 internal fun loginLayout(width: Dp, height: Dp): LoginLayout = when {
-    width > height && height <= LANDSCAPE_MAX_HEIGHT && width < LANDSCAPE_MAX_WIDTH -> LoginLayout.Landscape
-    width < COMPACT_WIDTH && height >= width && height <= SMALL_PORTRAIT_MAX_HEIGHT -> LoginLayout.SmallPortrait
+    width > height && height <= LANDSCAPE_MAX_HEIGHT && width < LANDSCAPE_MAX_WIDTH ->
+        LoginLayout.Landscape
+
+    width < COMPACT_WIDTH && height >= width && height <= SMALL_PORTRAIT_MAX_HEIGHT ->
+        LoginLayout.SmallPortrait
+
     else -> LoginLayout.Portrait
 }
 
@@ -241,7 +243,6 @@ private val COMPACT_WIDTH = 600.dp
 private val SMALL_PORTRAIT_MAX_HEIGHT = 720.dp
 private val LANDSCAPE_MAX_HEIGHT = 520.dp
 private val LANDSCAPE_MAX_WIDTH = 1280.dp
-
 private val PORTRAIT_MAX_WIDTH = 400.dp
 private val LANDSCAPE_CONTENT_MAX_WIDTH = 840.dp
 private val LANDSCAPE_CONTROL_HEIGHT = 44.dp

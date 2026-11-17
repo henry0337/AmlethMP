@@ -33,7 +33,7 @@
 - Áp dụng unidirectional data flow (UDF): **state đi xuống UI, event/callback đi lên state holder**.
 - Để logic giao diện trong UI layer; business logic và điều phối dữ liệu thuộc ViewModel hoặc tầng thích hợp, không đặt trong Composable.
 - Ưu tiên tổ chức theo feature khi giúp tăng cohesion; đặt code dùng chung vào `core/` hoặc module tương đương khi có lý do rõ ràng.
-- Data layer tổ chức theo loại dữ liệu, không theo màn hình: dữ liệu chỉ một feature dùng nằm ở `screen/<feature>/data`; dữ liệu nhiều feature cùng dùng (xác thực, phiên đăng nhập, cài đặt) nằm ở `core/`.
+- Data layer tổ chức theo loại dữ liệu, không theo màn hình: dữ liệu chỉ một feature dùng nằm ở `screen/<feature>/data`; dữ liệu nhiều feature cùng dùng (xác thực, cài đặt) nằm ở `core/`. Dữ liệu chỉ tồn tại nhờ một loại dữ liệu khác nằm trong subpackage của nó, ví dụ phiên đăng nhập ở `core/auth/session`.
 - Giữ module có cohesion cao, coupling thấp; chỉ tách multi-module khi mang lại lợi ích thực tế về ownership, build, reuse hoặc dependency boundaries.
 - Dùng dependency injection theo lựa chọn của repository (ví dụ Hilt hoặc framework hiện có); không đưa thêm DI framework chỉ vì convention này.
 - Tránh dùng `AndroidViewModel` hoặc đưa `Activity`, `View`, `Context` hay `Application` vào ViewModel nếu có thể chuyển dependency về UI/data layer.
@@ -97,7 +97,7 @@
 - Được gộp repository và data source vào một class khi chỉ có đúng một nguồn và không phụ thuộc repository khác; tách ra ngay khi có nguồn thứ hai (ví dụ phiên đăng nhập vừa lưu local vừa refresh qua mạng).
 - Repository được phụ thuộc repository khác (ví dụ `AuthRepository` dùng `SessionRepository`), nhưng không tạo phụ thuộc vòng.
 - Thao tác của nền tảng cần Activity hoặc hiện UI (Credential Manager, xin permission, Activity result) thuộc UI layer, không phải data source. UI lấy kết quả (ví dụ Google ID token), rồi đưa giá trị thuần cho ViewModel và repository.
-- Mỗi interface data source cần ít nhất một implementation thật; fake chỉ phục vụ test (xem mục 11).
+- Data source chỉ có một implementation là class cụ thể, không tạo interface chỉ để test: test repository bằng cách giả lớp bên dưới nó (`XApi`, `DataStore`), test data source bằng MockWebServer. Chỉ thêm interface khi có implementation thật thứ hai; fake chỉ phục vụ test (xem mục 11).
 
 ### Model
 
@@ -140,7 +140,7 @@
 
 - Dùng một giải pháp navigation nhất quán với codebase; khi bắt đầu dự án mới, đánh giá Navigation 3 cùng nhu cầu và mức độ phù hợp, không tự ý migrate dự án hiện hữu chỉ vì convention.
 - Điều hướng qua callback/route ở đúng tầng; tránh để reusable UI component tự sở hữu navigation toàn cục.
-- `NavKey` của mỗi màn hình đặt trong file riêng (`LoginKey.kt`), không để lẫn trong file Composable của màn hình.
+- `NavKey` của mỗi màn hình đặt trong file chứa `XRoute` của màn hình đó (`LoginKey` trong `LoginScreen.kt`), không tách file riêng chỉ cho một khai báo.
 - Truyền ID hoặc dữ liệu tối thiểu qua route; tải dữ liệu đầy đủ từ repository tại màn hình đích khi phù hợp.
 - Xử lý back navigation, deep links, trạng thái khôi phục và lỗi điều hướng theo yêu cầu ứng dụng.
 - Dùng `dp` cho kích thước layout và `sp` cho text; tránh giả định mọi thiết bị có cùng kích thước, orientation hoặc font scale.
