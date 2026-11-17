@@ -1,3 +1,4 @@
+import io.gitlab.arturbosch.detekt.Detekt
 import java.io.StringReader
 import java.util.Properties
 
@@ -7,25 +8,36 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.spotless)
+    alias(libs.plugins.detekt)
 }
 
-val googleWebClientId: String = providers
-    .fileContents(rootProject.layout.projectDirectory.file("local.properties"))
-    .asText
-    .map { text -> Properties().apply { load(StringReader(text)) }.getProperty("GOOGLE_WEB_CLIENT_ID")?.trim() }
-    .orElse(providers.environmentVariable("GOOGLE_WEB_CLIENT_ID"))
-    .getOrElse("")
+val googleWebClientId: String =
+    providers
+        .fileContents(rootProject.layout.projectDirectory.file("local.properties"))
+        .asText
+        .map { text ->
+            Properties().apply {
+                load(StringReader(text))
+            }.getProperty("GOOGLE_WEB_CLIENT_ID")?.trim()
+        }
+        .orElse(providers.environmentVariable("GOOGLE_WEB_CLIENT_ID"))
+        .getOrElse("")
 
 // 10.0.2.2 is how the Android emulator reaches the host machine's localhost.
-val apiBaseUrl: String = providers
-    .fileContents(rootProject.layout.projectDirectory.file("local.properties"))
-    .asText
-    .map { text -> Properties().apply { load(StringReader(text)) }.getProperty("API_BASE_URL")?.trim() }
-    .orElse(providers.environmentVariable("API_BASE_URL"))
-    .getOrElse("http://10.0.2.2:8000")
+val apiBaseUrl: String =
+    providers
+        .fileContents(rootProject.layout.projectDirectory.file("local.properties"))
+        .asText
+        .map { text ->
+            Properties().apply { load(StringReader(text)) }.getProperty("API_BASE_URL")?.trim()
+        }
+        .orElse(providers.environmentVariable("API_BASE_URL"))
+        .getOrElse("http://10.0.2.2:8000")
 
 android {
     namespace = "dev.myrlennia237.amlethmp"
+
     compileSdk {
         version = release(37)
     }
@@ -51,14 +63,36 @@ android {
             }
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         buildConfig = true
         compose = true
     }
+}
+
+spotless {
+    kotlin {
+        target("src/**/*.kt")
+        ktlint(libs.versions.ktlint.get())
+            .setEditorConfigPath(rootProject.file(".editorconfig"))
+    }
+
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint(libs.versions.ktlint.get())
+            .setEditorConfigPath(rootProject.file(".editorconfig"))
+    }
+}
+
+detekt {
+    toolVersion = libs.versions.detekt.get()
+    config.setFrom(file("config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
 }
 
 dependencies {
@@ -97,4 +131,14 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+tasks.withType<Detekt>().configureEach {
+    jvmTarget = "11"
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+        sarif.required.set(false)
+        md.required.set(false)
+    }
 }

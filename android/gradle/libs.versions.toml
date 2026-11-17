@@ -7,6 +7,9 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.11.0"
 activityCompose = "1.13.0"
 kotlin = "2.4.20"
+ktlint = "1.8.0"
+spotless = "8.11.0"
+detekt = "1.23.8"
 composeBom = "2026.09.00"
 navigation3 = "1.2.0"
 hilt = "2.60.1"
@@ -16,7 +19,7 @@ coroutines = "1.11.0"
 datastore = "1.3.0"
 timber = "5.0.1"
 tink = "1.24.0"
-serializationJson = "1.12.0"
+serializationJson = "1.13.0"
 credentials = "1.6.0"
 googleid = "1.2.1"
 okhttp = "5.5.1"
@@ -64,3 +67,5 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
