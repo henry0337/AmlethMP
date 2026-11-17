@@ -1,0 +1,111 @@
+package dev.myrlennia237.amlethmp.screen.login.ui.component
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import dev.myrlennia237.amlethmp.R
+import dev.myrlennia237.amlethmp.core.ui.theme.ControlHeight
+import dev.myrlennia237.amlethmp.core.ui.theme.Discord
+import dev.myrlennia237.amlethmp.core.ui.theme.Light
+import dev.myrlennia237.amlethmp.core.ui.theme.OnLight
+import dev.myrlennia237.amlethmp.core.ui.theme.Spacing
+import dev.myrlennia237.amlethmp.screen.login.ui.LoginStatus
+import dev.myrlennia237.amlethmp.screen.login.ui.LoginUiState
+import dev.myrlennia237.amlethmp.screen.login.ui.SignInMethod
+
+@Composable
+internal fun LoginActions(
+    uiState: LoginUiState,
+    onSignInClick: (SignInMethod) -> Unit,
+    modifier: Modifier = Modifier,
+    spacing: Dp = Spacing.Space3,
+    controlHeight: Dp = ControlHeight
+) {
+    val activeMethod = (uiState.status as? LoginStatus.SigningIn)?.method
+    val isEnabled = uiState.status is LoginStatus.Idle
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(spacing),
+        modifier = modifier
+    ) {
+        LoginButton(
+            text = stringResource(R.string.login_continue_google),
+            loadingText = stringResource(R.string.login_signing_in),
+            isLoading = activeMethod == SignInMethod.Google,
+            isEnabled = isEnabled,
+            isDimmed = activeMethod != null && activeMethod != SignInMethod.Google,
+            containerColor = Light,
+            contentColor = OnLight,
+            minHeight = controlHeight,
+            onClick = { onSignInClick(SignInMethod.Google) },
+            icon = {
+                Image(
+                    painter = painterResource(R.drawable.ic_google),
+                    contentDescription = null
+                )
+            }
+        )
+        LoginButton(
+            text = stringResource(R.string.login_continue_discord),
+            loadingText = stringResource(R.string.login_signing_in),
+            isLoading = activeMethod == SignInMethod.Discord,
+            isEnabled = isEnabled,
+            isDimmed = activeMethod != null && activeMethod != SignInMethod.Discord,
+            containerColor = Discord,
+            contentColor = Light,
+            minHeight = controlHeight,
+            onClick = { onSignInClick(SignInMethod.Discord) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_discord),
+                    contentDescription = null
+                )
+            }
+        )
+
+        LoginDivider()
+
+        LoginButton(
+            text = stringResource(R.string.login_continue_guest),
+            loadingText = stringResource(R.string.login_signing_in),
+            isLoading = activeMethod == SignInMethod.Guest,
+            isEnabled = isEnabled,
+            isDimmed = activeMethod != null && activeMethod != SignInMethod.Guest,
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+            minHeight = controlHeight,
+            onClick = { onSignInClick(SignInMethod.Guest) },
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.ic_person),
+                    contentDescription = null
+                )
+            }
+        )
+    }
+}
+
+@Composable
+internal fun LoginGuestHint(modifier: Modifier = Modifier) {
+    Text(
+        text = stringResource(R.string.login_guest_hint),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.outline,
+        textAlign = TextAlign.Center,
+        modifier = modifier.fillMaxWidth()
+    )
+}
