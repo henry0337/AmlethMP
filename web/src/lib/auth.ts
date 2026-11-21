@@ -7,6 +7,10 @@ export function getApiOrigin(): string {
   );
 }
 
-export function getGoogleLoginUrl(): string {
-  return `${getApiOrigin()}/auth/google/login`;
+export type AuthProvider = "google" | "discord";
+
+export const authProviders: readonly AuthProvider[] = ["google", "discord"];
+
+export function getLoginUrl(provider: AuthProvider): string {
+  return `${getApiOrigin()}/auth/${provider}/login`;
 }

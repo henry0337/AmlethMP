@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { authProviders } from "@/lib/auth";
 import { LoginScreen, type LoginPreviewState } from "./LoginScreen";
 
 const previewStates = new Set<LoginPreviewState>([
@@ -20,5 +21,8 @@ export function LoginPreview() {
       ? (state as LoginPreviewState)
       : undefined;
 
-  return <LoginScreen initialState={initialState} />;
+  const provider = searchParams.get("provider");
+  const authProvider = authProviders.find((item) => item === provider);
+
+  return <LoginScreen initialState={initialState} provider={authProvider} />;
 }

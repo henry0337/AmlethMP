@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/app/component/Button";
 import { Toast, ToastRegion } from "@/app/component/Toast";
-import { getGoogleLoginUrl } from "@/lib/auth";
+import { type AuthProvider, getLoginUrl } from "@/lib/auth";
 
 export type LoginPreviewState =
   | "loading"
@@ -15,19 +15,26 @@ export type LoginPreviewState =
   | "account-conflict";
 type LoginNotice = Exclude<LoginPreviewState, "loading" | "loading-discord">;
 
+const providerNames: Record<AuthProvider, string> = {
+  discord: "Discord",
+  google: "Google"
+};
+
 interface LoginScreenProps {
   readonly initialState?: LoginPreviewState;
+  readonly provider?: AuthProvider;
 }
 
-export function LoginScreen({ initialState }: LoginScreenProps) {
+export function LoginScreen({
+  initialState,
+  provider = "google"
+}: LoginScreenProps) {
   const [notice, setNotice] = useState<LoginNotice | null>(
     initialState === "loading" || initialState === "loading-discord"
       ? null
       : (initialState ?? null)
   );
-  const [pendingProvider, setPendingProvider] = useState<
-    "google" | "discord" | null
-  >(
+  const [pendingProvider, setPendingProvider] = useState<AuthProvider | null>(
     initialState === "loading"
       ? "google"
       : initialState === "loading-discord"
@@ -46,7 +53,7 @@ export function LoginScreen({ initialState }: LoginScreenProps) {
       variant: "warning" as const
     },
     cancelled: {
-      message: "Bạn đã hủy đăng nhập bằng Google.",
+      message: `Bạn đã hủy đăng nhập bằng ${providerNames[provider]}.`,
       variant: "info" as const
     },
     error: {
@@ -54,14 +61,14 @@ export function LoginScreen({ initialState }: LoginScreenProps) {
       variant: "error" as const
     },
     success: {
-      message: "Đăng nhập bằng Google thành công.",
+      message: `Đăng nhập bằng ${providerNames[provider]} thành công.`,
       variant: "success" as const
     }
   };
 
-  function handleGoogleLogin() {
-    setPendingProvider("google");
-    window.location.assign(getGoogleLoginUrl());
+  function startLogin(nextProvider: AuthProvider) {
+    setPendingProvider(nextProvider);
+    window.location.assign(getLoginUrl(nextProvider));
   }
 
   return (
@@ -108,7 +115,7 @@ export function LoginScreen({ initialState }: LoginScreenProps) {
               icon={<GoogleIcon />}
               isLoading={isGooglePending}
               loadingLabel="Đang đăng nhập…"
-              onClick={handleGoogleLogin}
+              onClick={() => startLogin("google")}
               variant="primary"
             >
               Đăng nhập bằng Google
@@ -118,9 +125,10 @@ export function LoginScreen({ initialState }: LoginScreenProps) {
               icon={<DiscordIcon />}
               isLoading={isDiscordPending}
               loadingLabel="Đang đăng nhập…"
+              onClick={() => startLogin("discord")}
               variant="discord"
             >
-              Liên kết với Discord
+              Đăng nhập bằng Discord
             </Button>
             <div
               aria-hidden="true"
