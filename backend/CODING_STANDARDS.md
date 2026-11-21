@@ -89,6 +89,7 @@
 ## 9. Testing
 
 - Dùng pytest; đặt test trong `tests/` hoặc theo convention hiện tại của repo.
+- Viết test theo kiểu pytest thuần: hàm `test_*`, `assert` thường, `@pytest.mark.parametrize` cho nhiều bộ dữ liệu, fixture cho dữ liệu dùng chung và `pytest.raises` cho lỗi; không dùng `unittest.TestCase`.
 - Đặt tên file `test_*.py` và tên test mô tả hành vi/điều kiện/kết quả.
 - Viết unit test cho logic nghiệp vụ và integration/API test cho status code, response schema, validation và auth.
 - Dùng fixtures để quản lý app/client/test data; dọn tài nguyên sau test và cô lập dữ liệu giữa các test.

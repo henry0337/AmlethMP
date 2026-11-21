@@ -1,23 +1,24 @@
-import unittest
-
+import pytest
+from sqlalchemy import Table
 from sqlalchemy.orm import configure_mappers
 
 from app.db.base import Base
 from app.db.models import OAuthAccount, User
 
+TABLES = Base.metadata.sorted_tables
 
-class ModelRegistryTestCase(unittest.TestCase):
-    def test_registry_contains_the_models_of_every_module(self) -> None:
-        self.assertEqual(
-            set(Base.metadata.tables), {User.__tablename__, OAuthAccount.__tablename__}
-        )
 
-    def test_models_share_the_base_columns(self) -> None:
-        for table in Base.metadata.tables.values():
-            self.assertTrue(table.c.id.primary_key)
-            self.assertFalse(table.c.created_at.nullable)
-            self.assertFalse(table.c.updated_at.nullable)
-            self.assertIs(table.metadata, Base.metadata)
+def test_registry_contains_the_models_of_every_module() -> None:
+    assert set(Base.metadata.tables) == {User.__tablename__, OAuthAccount.__tablename__}
 
-    def test_relationships_between_modules_resolve(self) -> None:
-        configure_mappers()
+
+@pytest.mark.parametrize("table", TABLES, ids=[table.name for table in TABLES])
+def test_models_share_the_base_columns(table: Table) -> None:
+    assert table.c.id.primary_key
+    assert not table.c.created_at.nullable
+    assert not table.c.updated_at.nullable
+    assert table.metadata is Base.metadata
+
+
+def test_relationships_between_modules_resolve() -> None:
+    configure_mappers()
