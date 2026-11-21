@@ -7,9 +7,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from app.core.config import get_settings
-from app.db.base import Base
-
-# Import each model package here as models are added, so Alembic can discover it.
+from app.db.models import metadata
 
 config = context.config
 
@@ -17,15 +15,11 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 config.set_main_option("sqlalchemy.url", get_settings().database_url)
-target_metadata = Base.metadata
+target_metadata = metadata
 
 
 def do_run_migrations(connection: Connection) -> None:
-    context.configure(
-        connection=connection,
-        target_metadata=target_metadata,
-        compare_type=True,
-    )
+    context.configure(connection=connection, target_metadata=target_metadata, compare_type=True)
 
     with context.begin_transaction():
         context.run_migrations()
@@ -35,7 +29,7 @@ async def run_async_migrations() -> None:
     connectable = async_engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
+        poolclass=pool.NullPool
     )
 
     async with connectable.connect() as connection:

@@ -1,26 +1,112 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+  --color-bg: #0a0a0b;
+  --color-surface: #161618;
+  --color-surface-raised: #1f1f22;
+  --color-border: #2c2c31;
+  --color-text: #f4f4f5;
+  --color-text-muted: #a1a1aa;
+  --color-text-subtle: #71717a;
+  --color-accent: #a78bfa;
+  --color-danger: #f87171;
+  --color-warning: #fbbf24;
+  --color-success: #4ade80;
+  --color-info: #60a5fa;
+  --color-on-light: #1f1f1f;
+  --color-light: #fff;
+  --color-discord: #5865f2;
+  --color-discord-hover: #4752c4;
+  --font-family:
+    Inter, "Segoe UI", Roboto, "Helvetica Neue", system-ui, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.15;
+  --line-height-body: 1.5;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+  --control-height: 52px;
+  --transition: 150ms ease;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-app-bg: var(--color-bg);
+  --color-app-surface: var(--color-surface);
+  --color-app-surface-raised: var(--color-surface-raised);
+  --color-app-border: var(--color-border);
+  --color-app-text: var(--color-text);
+  --color-app-text-muted: var(--color-text-muted);
+  --color-app-text-subtle: var(--color-text-subtle);
+  --color-app-accent: var(--color-accent);
+  --color-app-light: var(--color-light);
+  --color-app-on-light: var(--color-on-light);
+  --color-app-discord: var(--color-discord);
+  --color-app-discord-hover: var(--color-discord-hover);
+  --font-sans: var(--font-family);
+  --breakpoint-tablet: 600px;
+  --breakpoint-desktop: 1280px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.97);
+  }
 }
