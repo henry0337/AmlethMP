@@ -12,9 +12,7 @@ class Settings(BaseSettings):
     """Runtime configuration loaded from environment variables and `.env`."""
 
     model_config = SettingsConfigDict(
-        env_file=PROJECT_ROOT / ".env",
-        env_file_encoding="utf-8",
-        extra="ignore",
+        env_file=PROJECT_ROOT / ".env", env_file_encoding="utf-8", extra="ignore"
     )
 
     app_name: str = "AmlethMP API"
@@ -36,9 +34,7 @@ class Settings(BaseSettings):
     @classmethod
     def database_url_uses_asyncpg(cls, value: str) -> str:
         if not value.startswith("postgresql+asyncpg://"):
-            raise ValueError(
-                "DATABASE_URL must use the postgresql+asyncpg:// scheme."
-            )
+            raise ValueError("DATABASE_URL must use the postgresql+asyncpg:// scheme.")
         return value
 
     @model_validator(mode="after")
@@ -49,15 +45,10 @@ class Settings(BaseSettings):
 
     @property
     def google_login_is_configured(self) -> bool:
-        return all(
-            (
-                self.google_client_id,
-                self.google_client_secret,
-                self.auth_session_secret,
-            )
-        )
+        return all((self.google_client_id, self.google_client_secret, self.auth_session_secret))
 
 
 @lru_cache
 def get_settings() -> Settings:
-    return Settings()
+    # Required fields are loaded from the environment, not passed as arguments.
+    return Settings()  # pyright: ignore[reportCallIssue]

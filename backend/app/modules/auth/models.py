@@ -1,3 +1,4 @@
+from enum import Enum as PythonEnum
 from enum import StrEnum
 from uuid import UUID
 
@@ -5,7 +6,7 @@ from sqlalchemy import Enum, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
-from app.models.user import User
+from app.modules.users.models import User
 
 
 class OAuthProvider(StrEnum):
@@ -15,33 +16,25 @@ class OAuthProvider(StrEnum):
     DISCORD = "discord"
 
 
+def enum_values(enum_class: type[PythonEnum]) -> list[str]:
+    """Store the enum values (such as "google") in the database instead of the member names."""
+    return [str(member.value) for member in enum_class]
+
+
 class OAuthAccount(Base):
     """An external OAuth identity linked to a user."""
 
     __tablename__ = "oauth_accounts"
     __table_args__ = (
         UniqueConstraint(
-            "provider",
-            "provider_account_id",
-            name="uq_oauth_accounts_provider_account",
+            "provider", "provider_account_id", name="uq_oauth_accounts_provider_account"
         ),
-        UniqueConstraint(
-            "user_id",
-            "provider",
-            name="uq_oauth_accounts_user_provider",
-        ),
+        UniqueConstraint("user_id", "provider", name="uq_oauth_accounts_user_provider")
     )
 
-    user_id: Mapped[UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
-        index=True,
-    )
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     provider: Mapped[OAuthProvider] = mapped_column(
-        Enum(
-            OAuthProvider,
-            name="oauth_provider",
-            values_callable=lambda providers: [provider.value for provider in providers],
-        )
+        Enum(OAuthProvider, name="oauth_provider", values_callable=enum_values)
     )
     provider_account_id: Mapped[str] = mapped_column(String(255))
     user: Mapped[User] = relationship(back_populates="oauth_accounts")

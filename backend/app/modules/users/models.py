@@ -8,7 +8,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
 if TYPE_CHECKING:
-    from app.models.oauth_account import OAuthAccount
+    from app.modules.auth.models import OAuthAccount
 
 
 class User(Base):
@@ -16,20 +16,10 @@ class User(Base):
 
     __tablename__ = "users"
 
-    email: Mapped[str | None] = mapped_column(
-        String(320),
-        unique=True,
-        index=True,
-    )
+    email: Mapped[str | None] = mapped_column(String(320), unique=True, index=True)
     display_name: Mapped[str | None] = mapped_column(String(100))
     avatar_url: Mapped[str | None] = mapped_column(String(2048))
-    is_active: Mapped[bool] = mapped_column(
-        Boolean,
-        nullable=False,
-        server_default=true(),
-    )
+    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=true())
     oauth_accounts: Mapped[list[OAuthAccount]] = relationship(
-        back_populates="user",
-        cascade="all, delete-orphan",
-        passive_deletes=True,
+        back_populates="user", cascade="all, delete-orphan", passive_deletes=True
     )

@@ -10,6 +10,7 @@
 - Giữ function/class tập trung vào một trách nhiệm; tách khi điều đó cải thiện độ rõ ràng, không tách máy móc theo số dòng.
 - Thêm docstring cho public module/class/function khi mục đích hoặc contract chưa rõ; comment giải thích lý do, không lặp lại code.
 - Dùng f-string cho nội suy chuỗi; không dùng bare `except:`.
+- Không dùng trailing comma (trừ tuple một phần tử `(value,)` bắt buộc phải có). Format bằng `uv run python scripts/format.py` thay vì `ruff format`, vì Ruff luôn tự thêm trailing comma khi tách mỗi phần tử một dòng.
 - Không sửa code không liên quan tới phạm vi task nếu không cần thiết.
 
 ## 2. Type hints và Python features
@@ -100,32 +101,38 @@
 
 - Ưu tiên `pyproject.toml` cho project metadata và tool configuration; giữ dependency/lock file đồng bộ với package manager thực tế (`uv`, Poetry, PDM hoặc pip-tools).
 - Không tự ý đổi package manager, Python version hoặc framework major version trong một task không liên quan.
-- Dùng một formatter/linter chính; lựa chọn mặc định gợi ý là Ruff cho lint/format.
+- Dùng một formatter/linter chính; lựa chọn mặc định gợi ý là Ruff cho lint/format. Dự án dùng Ruff để lint và `scripts/format.py` (Ruff + bước bỏ trailing comma) để sắp xếp import và format.
 - Dùng mypy hoặc Pyright khi dự án cần static type checking; cấu hình mức kiểm tra nhất quán thay vì bật/tắt tùy tiện.
+- Pyright chạy ở chế độ `strict` cho code ứng dụng. Ngoại lệ không bị kiểm tra: `scripts/`, `alembic/versions/` (migration) và các file khác mà chủ dự án chỉ định; thêm chúng vào `exclude` trong `[tool.pyright]` thay vì rải `# pyright: ignore`.
 - CI nên chạy lint, format check, type check (nếu dùng), tests và build/package checks phù hợp.
 - Không thêm công cụ hoặc dependency mới nếu công cụ sẵn có đã đáp ứng yêu cầu.
 - Kiểm tra cấu hình và scripts hiện có trước khi chạy hoặc đề xuất lệnh.
 
 ## 11. Gợi ý cấu trúc dự án
 
+Dự án nhóm code theo domain/feature thay vì theo lớp kỹ thuật:
+
 ```text
 app/
 ├── main.py              # tạo FastAPI app / include routers
 ├── core/                # settings, logging, security, cross-cutting concerns
-├── api/
-│   ├── deps.py           # dependencies dùng chung
-│   └── routes/           # APIRouter theo domain
-├── schemas/              # Pydantic request/response models nếu dùng chung
-├── services/             # nghiệp vụ nếu dự án cần layer này
-├── repositories/         # truy cập dữ liệu nếu dự án cần layer này
-├── models/               # ORM/persistence models
-└── db/                   # engine, session, migrations integration
+├── db/                  # Base, engine, session, DatabaseSession
+│   └── models.py         # import models của mọi module (Alembic, mapper registry)
+└── modules/
+    └── <module>/         # một domain, ví dụ auth, users
+        ├── models.py      # ORM models của module
+        ├── schemas.py     # Pydantic request/response models
+        ├── service.py     # nghiệp vụ
+        ├── router.py      # APIRouter của module
+        └── ...            # exceptions.py, dependencies.py, client của dịch vụ ngoài (google.py)
 
- tests/
+tests/                   # phản chiếu cấu trúc app/ (tests/modules/<module>/test_*.py)
 ```
 
-- Đây là gợi ý, không phải cấu trúc bắt buộc; với dự án lớn, cân nhắc nhóm theo domain/feature.
-- Tránh tạo mọi folder/layer ngay từ đầu nếu chưa có nhu cầu thực tế.
+- Chỉ tạo file khi module thực sự cần; module nhỏ có thể chỉ có `models.py` và `router.py`.
+- Module không import ngược vòng tròn: `auth` phụ thuộc `users`; `users` chỉ tham chiếu `auth` trong `TYPE_CHECKING`.
+- Thêm module mới: tạo `app/modules/<module>/`, include router trong `main.py` và import models vào `app/db/models.py` rồi tạo migration.
+- Tên file test phải khác nhau giữa các thư mục vì `tests/` không dùng `__init__.py`.
 
 ## 12. Checklist trước khi hoàn tất task
 
