@@ -21,6 +21,7 @@ Run these commands from `web/` using the pnpm version in `package.json`:
 | ------------------- | ------------------------------------------------------------------------- |
 | `pnpm lint`         | Check Next.js, React and TypeScript lint rules; warnings fail the check.  |
 | `pnpm lint:fix`     | Apply automatic ESLint fixes; review remaining diagnostics.               |
+| `pnpm fix`          | Apply ESLint fixes, then format with Prettier.                            |
 | `pnpm format`       | Format supported project files with Prettier.                             |
 | `pnpm format:check` | Check formatting without changing files.                                  |
 | `pnpm typecheck`    | Generate Next.js route types, then run TypeScript without emitting files. |

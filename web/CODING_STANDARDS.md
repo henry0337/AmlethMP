@@ -129,10 +129,10 @@
 - Kiểm tra các trạng thái quan trọng như thành công, loading, validation error và quyền truy cập khi phù hợp.
 - Dùng ESLint để kiểm tra lỗi code, Rules of Hooks, TypeScript và accessibility theo nhu cầu dự án.
 - Dùng Prettier làm formatter thống nhất; cấu hình chuẩn nằm ở `.prettierrc.json`, phạm vi bỏ qua nằm ở `.prettierignore`.
-- Dùng indent 2 spaces, double quotes, semicolons, trailing commas và LF; để Prettier xử lý ngắt dòng với `printWidth: 80`.
+- Dùng indent 2 spaces, double quotes, semicolons, không dùng trailing comma và LF; để Prettier xử lý ngắt dòng với `printWidth: 80`.
 - Dùng `prettier-plugin-tailwindcss` với stylesheet Tailwind 4 tại `src/app/globals.css` để tự sắp xếp utility classes.
 - Đặt `eslint-config-prettier` sau các lint preset để tắt rule định dạng xung đột; chạy ESLint và Prettier bằng các lệnh riêng.
-- Chạy `pnpm format` để định dạng, `pnpm lint:fix` để tự sửa lỗi lint hỗ trợ được; chạy `pnpm check` (format check, lint, typecheck) và `pnpm build` trước khi mở pull request.
+- Chạy `pnpm fix` để tự sửa lỗi lint hỗ trợ được rồi định dạng (hoặc `pnpm lint:fix` và `pnpm format` riêng lẻ); chạy `pnpm check` (format check, lint, typecheck) và `pnpm build` trước khi mở pull request.
 - Cấu hình scripts/CI để chạy lint, typecheck, test và build trước khi merge.
 
 ## 14. Git và code review
