@@ -75,6 +75,19 @@ Set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and a random
 `AUTH_SESSION_SECRET` in `.env`. The API stores only an opaque, signed,
 HttpOnly browser session; the Google client secret never belongs in the web app.
 
+## Discord sign-in (local development)
+
+In the [Discord Developer Portal](https://discord.com/developers/applications), create an
+application and open **OAuth2**. Add `http://localhost:8000/auth/discord/callback` as a redirect,
+then set `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET` in `.env`. Discord shares
+`AUTH_SESSION_SECRET` with Google. The API requests only the `identify` and `email` scopes and
+creates a user on first sign-in. A Discord email is used only when Discord marks it verified; an
+email that already belongs to another user is reported as `account-conflict` and accounts are not
+merged.
+
+Both providers redirect the browser to `WEB_ORIGIN/?login=<result>&provider=<provider>`, where the
+result is `success`, `cancelled`, `error` or `account-conflict`.
+
 For production, use HTTPS for the API callback and web origin, set
 `AUTH_SESSION_COOKIE_SECURE=true`, and register the exact production callback
 URL with Google.

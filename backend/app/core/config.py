@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     google_client_id: str | None = None
     google_client_secret: SecretStr | None = Field(default=None, repr=False)
     google_redirect_uri: str = "http://localhost:8000/auth/google/callback"
+    discord_client_id: str | None = None
+    discord_client_secret: SecretStr | None = Field(default=None, repr=False)
+    discord_redirect_uri: str = "http://localhost:8000/auth/discord/callback"
     auth_session_secret: SecretStr | None = Field(default=None, repr=False)
     auth_session_max_age_seconds: int = Field(default=60 * 60 * 24 * 7, ge=60)
     auth_session_cookie_secure: bool = False
@@ -46,6 +49,10 @@ class Settings(BaseSettings):
     @property
     def google_login_is_configured(self) -> bool:
         return all((self.google_client_id, self.google_client_secret, self.auth_session_secret))
+
+    @property
+    def discord_login_is_configured(self) -> bool:
+        return all((self.discord_client_id, self.discord_client_secret, self.auth_session_secret))
 
 
 @lru_cache
