@@ -6,22 +6,18 @@ import prettier from "eslint-config-prettier/flat";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  // Keep formatting rules disabled after all lint presets.
   prettier,
-  // Override default ignores of eslint-config-next.
   globalIgnores([
-    // Default ignores of eslint-config-next:
     ".next/**",
     "out/**",
     "build/**",
     "coverage/**",
     "next-env.d.ts",
-    // Environment-managed directories can be mounted as unavailable placeholders.
     ".agents/**",
     ".aws/**",
     ".claude/**",
-    ".codex/**",
-  ]),
+    ".codex/**"
+  ])
 ]);
 
 export default eslintConfig;

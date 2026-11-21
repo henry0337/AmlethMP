@@ -5,7 +5,7 @@
   "useTabs": false,
   "semi": true,
   "singleQuote": false,
-  "trailingComma": "all",
+  "trailingComma": "none",
   "endOfLine": "lf",
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindStylesheet": "./src/app/globals.css"

@@ -23,7 +23,7 @@ export function LoginScreen({ initialState }: LoginScreenProps) {
   const [notice, setNotice] = useState<LoginNotice | null>(
     initialState === "loading" || initialState === "loading-discord"
       ? null
-      : (initialState ?? null),
+      : (initialState ?? null)
   );
   const [pendingProvider, setPendingProvider] = useState<
     "google" | "discord" | null
@@ -32,7 +32,7 @@ export function LoginScreen({ initialState }: LoginScreenProps) {
       ? "google"
       : initialState === "loading-discord"
         ? "discord"
-        : null,
+        : null
   );
   const isGooglePending = pendingProvider === "google";
   const isDiscordPending = pendingProvider === "discord";
@@ -43,20 +43,20 @@ export function LoginScreen({ initialState }: LoginScreenProps) {
     "account-conflict": {
       message:
         "Email này đã thuộc về một tài khoản khác. Vui lòng liên hệ hỗ trợ.",
-      variant: "warning" as const,
+      variant: "warning" as const
     },
     cancelled: {
       message: "Bạn đã hủy đăng nhập bằng Google.",
-      variant: "info" as const,
+      variant: "info" as const
     },
     error: {
       message: "Đã có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.",
-      variant: "error" as const,
+      variant: "error" as const
     },
     success: {
       message: "Đăng nhập bằng Google thành công.",
-      variant: "success" as const,
-    },
+      variant: "success" as const
+    }
   };
 
   function handleGoogleLogin() {

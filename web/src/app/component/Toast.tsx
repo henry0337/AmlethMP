@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type ReactNode,
+  type ReactNode
 } from "react";
 
 export type ToastVariant = "error" | "warning" | "success" | "info";
@@ -30,7 +30,7 @@ export function Toast({
   message,
   variant = "error",
   duration = 5000,
-  onDismiss,
+  onDismiss
 }: ToastProps) {
   const [isLeaving, setIsLeaving] = useState(false);
   const remaining = useRef(duration);
@@ -75,11 +75,11 @@ export function Toast({
     error: "var(--color-danger)",
     warning: "var(--color-warning)",
     success: "var(--color-success)",
-    info: "var(--color-info)",
+    info: "var(--color-info)"
   };
 
   const toastStyle = {
-    "--toast-color": toastColors[variant],
+    "--toast-color": toastColors[variant]
   } as CSSProperties;
 
   return (
@@ -116,7 +116,7 @@ function ToastIcon({ variant }: { variant: ToastVariant }) {
       "M12 5.99 19.53 19H4.47L12 5.99M12 2 1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z",
     success:
       "m16.59 7.58L10 14.17l-3.59-3.58L5 12l5 5 8-8zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z",
-    info: "M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z",
+    info: "M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
   };
 
   return (

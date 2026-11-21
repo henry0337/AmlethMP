@@ -9,7 +9,7 @@ const previewStates = new Set<LoginPreviewState>([
   "error",
   "success",
   "cancelled",
-  "account-conflict",
+  "account-conflict"
 ]);
 
 export function LoginPreview() {

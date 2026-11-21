@@ -24,13 +24,13 @@ export function Button({
     discord:
       "bg-app-discord text-app-light hover:not-disabled:bg-app-discord-hover",
     secondary:
-      "border-app-border text-app-text hover:not-disabled:border-app-text-subtle hover:not-disabled:bg-app-surface",
+      "border-app-border text-app-text hover:not-disabled:border-app-text-subtle hover:not-disabled:bg-app-surface"
   };
 
   const buttonClassName = [
     "inline-flex min-h-13 w-full items-center justify-center gap-3 rounded-full border border-transparent px-6 text-base font-medium transition-[background-color,border-color,transform,opacity] duration-150 ease-out active:scale-[0.985] disabled:cursor-default disabled:opacity-[0.55] motion-reduce:transition-none",
     variantClasses[variant],
-    className,
+    className
   ]
     .filter(Boolean)
     .join(" ");
